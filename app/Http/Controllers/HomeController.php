@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CourseService;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    public function __construct(private readonly CourseService $courses)
+    {
+    }
+
     public function index(): View
     {
         $features = [
@@ -16,13 +21,7 @@ class HomeController extends Controller
             ['icon' => 'users-round', 'title' => 'Expert Instructors', 'text' => 'Industry professionals'],
         ];
 
-        $courses = [
-            ['number' => '01', 'title' => 'Technical Skills', 'text' => 'Mechanical, Electrical, IT and more', 'icon' => 'settings-2'],
-            ['number' => '02', 'title' => 'IT & Digital Skills', 'text' => 'Computer, software and online tools', 'icon' => 'laptop'],
-            ['number' => '03', 'title' => 'Vocational Training', 'text' => 'Practical trades and technical trades', 'icon' => 'hard-hat'],
-            ['number' => '04', 'title' => 'Soft Skills', 'text' => 'Communication, productivity and growth', 'icon' => 'message-circle'],
-            ['number' => '05', 'title' => 'Placement Preparation', 'text' => 'CV writing, interviews and job readiness', 'icon' => 'file-user'],
-        ];
+        $courses = $this->courses->publicCourses();
 
         $stats = [
             ['value' => '1500+', 'label' => 'Trained students', 'icon' => 'users'],
@@ -37,5 +36,17 @@ class HomeController extends Controller
         ];
 
         return view('welcome', compact('features', 'courses', 'stats', 'news'));
+    }
+
+    public function course(string $slug): View
+    {
+        $courses = $this->courses->publicCourses();
+        $course = $this->courses->findPublicBySlug($slug);
+
+        abort_unless($course, 404);
+
+        $gallery = $this->courses->gallery($course);
+
+        return view('course-detail', compact('course', 'courses', 'gallery'));
     }
 }
