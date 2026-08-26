@@ -42,7 +42,7 @@
                 <a class="admin-view-site" href="{{ route('home') }}" target="_blank"><i data-lucide="external-link"></i> View Site</a>
                 <div class="admin-user-menu">
                     <button type="button" data-admin-menu>
-                        <img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Admin">
+                        <img src="{{ asset(auth('admin')->user()->profile_image ?: 'data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Admin">
                         <span>{{ collect(explode(' ', auth('admin')->user()->name))->take(2)->join(' ') }}</span>
                         <i data-lucide="chevron-down"></i>
                     </button>

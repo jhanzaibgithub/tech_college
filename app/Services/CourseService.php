@@ -80,14 +80,15 @@ class CourseService
     {
         $title = trim($data['title']);
         $slug = $data['slug'] ?? null;
-        $summary = Str::words(strip_tags($data['details'] ?? ''), 14, '');
+        $summary = trim($data['short_description'] ?? '');
+        $overview = Str::words(strip_tags($data['details'] ?? ''), 18, '');
 
         return [
             'title' => $title,
             'slug' => $slug ? Str::slug($slug) : $this->uniqueSlug($title, $course),
             'icon' => $data['icon'] ?? 'book-open',
             'short_description' => $summary ?: $title,
-            'overview' => $summary ?: $title,
+            'overview' => $overview ?: $summary ?: $title,
             'details' => $data['details'] ?? null,
             'is_active' => isset($data['is_active']),
             'sort_order' => $course?->sort_order ?? ((int) Course::max('sort_order') + 1),

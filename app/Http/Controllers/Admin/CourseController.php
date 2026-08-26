@@ -92,6 +92,7 @@ class CourseController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('courses', 'slug')->ignore($course?->id)],
             'icon' => ['required', 'string', 'max:80'],
+            'short_description' => ['required', 'string', 'max:500'],
             'details' => ['required', 'string'],
             'is_active' => ['nullable'],
             'images.*' => ['nullable', 'image', 'max:4096'],

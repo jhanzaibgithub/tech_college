@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
             ['email' => 'admin@techcollege.com.pk'],
             [
                 'name' => 'Tech College Admin',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('12345678'),
             ]
         );
     }

@@ -20,7 +20,7 @@
                 <div class="course-detail-copy">
                     <p class="detail-kicker"><i data-lucide="{{ $course->icon }}"></i> {{ $course->title }}</p>
                     <h1>{{ $course->title }}</h1>
-                    <p>{{ $course->overview }}</p>
+                    <p>{{ $course->short_description ?: $course->overview }}</p>
                     <div class="hero-actions"><a class="button" href="{{ route('home') }}#admissions">Apply Now <i data-lucide="arrow-right"></i></a><a class="button button-outline" href="{{ route('home') }}#courses">Back to Courses <i data-lucide="arrow-left"></i></a></div>
                 </div>
                 <div class="detail-carousel owl-carousel owl-theme">
@@ -34,11 +34,10 @@
             <div class="container detail-content-grid">
                 <article class="detail-panel">
                     <h2>Course Details</h2>
-                    <p>{{ $course->overview }}</p>
                     @if ($course->details)
-                        <div class="detail-rich">{!! $course->details !!}</div>
+                        <div class="detail-rich ck-content">{!! $course->details !!}</div>
                     @endif
-                    <ul>
+                    <ul class="detail-benefits">
                         <li><i data-lucide="circle-check"></i>Hands-on practical training</li>
                         <li><i data-lucide="circle-check"></i>Experienced instructors</li>
                         <li><i data-lucide="circle-check"></i>Recognized certification support</li>
@@ -74,6 +73,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons();@if (session('status'))Swal.fire({icon:'success',title:'Request Sent',text:@json(session('status')),confirmButtonColor:'#063d2b'});@endif if(window.jQuery&&jQuery.fn.owlCarousel){const detailCount=jQuery('.detail-carousel .detail-slide').length;jQuery('.detail-carousel').owlCarousel({items:1,loop:detailCount>1,nav:detailCount>1,dots:detailCount>1,autoplay:detailCount>1,autoplayTimeout:3600,autoplayHoverPause:true});const courseCount=jQuery('.course-carousel > .course-card').length;if(courseCount>5){jQuery('.course-carousel').owlCarousel({loop:true,margin:28,nav:false,dots:true,autoplay:true,autoplayTimeout:3500,autoplayHoverPause:true,responsive:{0:{items:1,margin:14},560:{items:2,margin:18},900:{items:3,margin:22},1180:{items:5,margin:28}}});}jQuery('.course-image-carousel').each(function(){const imageCount=jQuery(this).find('img').length;jQuery(this).owlCarousel({items:1,loop:imageCount>1,nav:false,dots:false,autoplay:imageCount>1,autoplayTimeout:2600,mouseDrag:false,touchDrag:false,animateOut:'fadeOut'});});lucide.createIcons();}</script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons();document.querySelector('.menu-toggle')?.addEventListener('click',()=>document.querySelector('.nav-wrap nav')?.classList.toggle('open'));document.querySelectorAll('.nav-wrap nav a').forEach((link)=>link.addEventListener('click',()=>document.querySelector('.nav-wrap nav')?.classList.remove('open')));@if (session('status'))Swal.fire({icon:'success',title:'Request Sent',text:@json(session('status')),confirmButtonColor:'#063d2b'});@endif if(window.jQuery&&jQuery.fn.owlCarousel){const detailCount=jQuery('.detail-carousel .detail-slide').length;jQuery('.detail-carousel').owlCarousel({items:1,loop:detailCount>1,nav:detailCount>1,dots:detailCount>1,autoplay:detailCount>1,autoplayTimeout:3600,autoplayHoverPause:true});const courseCount=jQuery('.course-carousel > .course-card').length;if(courseCount>5){jQuery('.course-carousel').owlCarousel({loop:true,margin:28,nav:false,dots:true,autoplay:true,autoplayTimeout:3500,autoplayHoverPause:true,responsive:{0:{items:1,margin:14},560:{items:2,margin:18},900:{items:3,margin:22},1180:{items:5,margin:28}}});}jQuery('.course-image-carousel').each(function(){const imageCount=jQuery(this).find('img').length;jQuery(this).owlCarousel({items:1,loop:imageCount>1,nav:false,dots:false,autoplay:imageCount>1,autoplayTimeout:2600,mouseDrag:false,touchDrag:false,animateOut:'fadeOut'});});lucide.createIcons();}</script>
 </body>
 </html>

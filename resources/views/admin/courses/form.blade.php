@@ -19,6 +19,10 @@
                 <label class="admin-check admin-active"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $course->is_active ?? true))> Active course</label>
             </div>
 
+            <div class="admin-full">
+                <label>Short Overview <input type="text" name="short_description" value="{{ old('short_description', $course->short_description) }}" maxlength="500" placeholder="2-3 words for course card, e.g. Job-Ready Skills" required></label>
+            </div>
+
             <div class="admin-editor-wrap">
                 <label>Course Detail Description</label>
                 <textarea id="details-editor" name="details">{{ old('details', $course->details) }}</textarea>
