@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\CourseService;
+use App\Models\NewsEvent;
+use App\Models\StudentTestimonial;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -30,12 +32,20 @@ class HomeController extends Controller
             ['value' => '4.8/5', 'label' => 'Student satisfaction', 'icon' => 'star'],
         ];
 
-        $news = [
-            ['date' => 'May 20, 2026', 'title' => 'Admissions open for July 2026 batch', 'text' => 'Start your journey towards a successful career.'],
-            ['date' => 'May 15, 2026', 'title' => 'Free career counselling sessions', 'text' => 'Get expert guidance for your brighter future.'],
-        ];
+        $testimonials = StudentTestimonial::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
 
-        return view('welcome', compact('features', 'courses', 'stats', 'news'));
+        $newsEvents = NewsEvent::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->take(4)
+            ->get();
+
+        return view('welcome', compact('features', 'courses', 'stats', 'testimonials', 'newsEvents'));
     }
 
     public function course(string $slug): View

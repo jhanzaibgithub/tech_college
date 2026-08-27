@@ -6,7 +6,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\NewsEventController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\StudentTestimonialController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +37,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::post('/courses/reorder', [CourseController::class, 'reorder'])->name('courses.reorder');
         Route::resource('courses', CourseController::class)->except(['show']);
+        Route::post('/testimonials/reorder', [StudentTestimonialController::class, 'reorder'])->name('testimonials.reorder');
+        Route::resource('testimonials', StudentTestimonialController::class)->except(['show']);
+        Route::post('/news-events/reorder', [NewsEventController::class, 'reorder'])->name('news-events.reorder');
+        Route::resource('news-events', NewsEventController::class)->except(['show']);
         Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::patch('/enrollments/{enrollment}', [EnrollmentController::class, 'update'])->name('enrollments.update');
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');

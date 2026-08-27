@@ -29,6 +29,8 @@ class EnrollmentController extends Controller
 
         $this->enrollments->create($course, $data);
 
-        return back()->with('status', 'Your enrollment request has been submitted.');
+        return redirect()
+            ->route('home')
+            ->with('status', 'Your enrollment request has been submitted.');
     }
 }

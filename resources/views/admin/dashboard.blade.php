@@ -7,7 +7,7 @@
         <article><i data-lucide="book-open"></i><strong>{{ $courseCount }}</strong><span>Total Courses</span></article>
         <article><i data-lucide="user-plus"></i><strong>{{ $enrollmentCount }}</strong><span>Total Enrollments</span></article>
         <article><i data-lucide="bell"></i><strong>{{ $newEnrollmentCount }}</strong><span>New Requests</span></article>
-        <article><i data-lucide="circle-check"></i><strong>{{ $confirmedEnrollmentCount }}</strong><span>Confirmed Students</span></article>
+        <article><i data-lucide="message-square-quote"></i><strong>{{ $testimonialCount }}</strong><span>Testimonials</span></article>
     </section>
     <section class="admin-dashboard-grid">
     <section class="admin-card">

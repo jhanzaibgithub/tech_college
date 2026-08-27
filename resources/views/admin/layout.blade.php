@@ -7,7 +7,7 @@
     <link rel="icon" type="image/jpeg" href="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body class="admin-body">
     <aside class="admin-sidebar">
@@ -18,6 +18,8 @@
         <nav class="admin-nav">
             <a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])><i data-lucide="layout-dashboard"></i> Dashboard</a>
             <a href="{{ route('admin.courses.index') }}" @class(['active' => request()->routeIs('admin.courses.*')])><i data-lucide="book-open"></i> Courses</a>
+            <a href="{{ route('admin.testimonials.index') }}" @class(['active' => request()->routeIs('admin.testimonials.*')])><i data-lucide="message-square-quote"></i> Testimonials</a>
+            <a href="{{ route('admin.news-events.index') }}" @class(['active' => request()->routeIs('admin.news-events.*')])><i data-lucide="newspaper"></i> News & Events</a>
             <div @class(['admin-nav-dropdown', 'active' => request()->routeIs('admin.enrollments.*')])>
                 <button type="button" data-sidebar-dropdown>
                     <span><i data-lucide="user-plus"></i> {{ request()->routeIs('admin.enrollments.*') ? match(request('status', 'all')) { 'new' => 'New Requests', 'confirmed' => 'Confirmed Students', 'completed' => 'Completed Students', default => 'All Enrollments' } : 'Enrollments' }}</span>

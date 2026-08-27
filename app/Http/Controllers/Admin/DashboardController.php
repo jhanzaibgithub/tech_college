@@ -7,6 +7,8 @@ use App\Models\Admin;
 use App\Models\Course;
 use App\Models\CourseImage;
 use App\Models\Enrollment;
+use App\Models\NewsEvent;
+use App\Models\StudentTestimonial;
 use App\Services\EnrollmentService;
 use Illuminate\View\View;
 
@@ -27,6 +29,8 @@ class DashboardController extends Controller
             'newEnrollmentCount' => Enrollment::where('status', Enrollment::STATUS_NEW)->count(),
             'confirmedEnrollmentCount' => Enrollment::where('status', Enrollment::STATUS_CONFIRMED)->count(),
             'completedEnrollmentCount' => Enrollment::where('status', Enrollment::STATUS_COMPLETED)->count(),
+            'testimonialCount' => StudentTestimonial::count(),
+            'newsEventCount' => NewsEvent::count(),
             'monthlyEnrollments' => $this->enrollments->monthlyCounts(),
             'latestCourses' => Course::with('images')->latest()->take(5)->get(),
             'latestEnrollments' => Enrollment::with('course')->latest()->take(5)->get(),
