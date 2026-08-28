@@ -235,7 +235,7 @@ footer { background: #fff; border-top: 0; }
 .footer-rule { display: grid; grid-template-columns: 1fr 104px 1fr; align-items: center; gap: 24px; padding-top: 18px; }
 .footer-rule span { height: 4px; background: var(--green); }
 .footer-rule img { width: 104px; height: 88px; object-fit: cover; object-position: center top; mix-blend-mode: multiply; }
-.footer-grid { display: grid; grid-template-columns: 1.7fr .9fr 1.1fr 1.1fr 1.35fr; gap: 4px; padding: 10px 0 28px; }
+.footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding: 10px 0 28px; }
 .footer-logo { display: inline-flex; align-items: center; gap: 14px; }
 .footer-logo img { width: 114px; height: 102px; object-fit: cover; object-position: center top; mix-blend-mode: multiply; }
 .footer-logo span { display: grid; line-height: 1.05; }
