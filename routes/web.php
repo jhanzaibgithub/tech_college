@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EnrollmentController as PublicEnrollmentController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController;
@@ -35,6 +36,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
+        Route::resource('banners', BannerController::class)->except(['show']);
         Route::post('/courses/reorder', [CourseController::class, 'reorder'])->name('courses.reorder');
         Route::resource('courses', CourseController::class)->except(['show']);
         Route::post('/testimonials/reorder', [StudentTestimonialController::class, 'reorder'])->name('testimonials.reorder');

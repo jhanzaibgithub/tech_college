@@ -1,0 +1,23 @@
+.hero-banners { background: #f1f5ef; }
+.hero-banner-stage { position: relative; height: clamp(240px, 33.333vw, 600px); overflow: hidden; background: #e5ece5; }
+.hero-banner-stage::after { content: ''; position: absolute; inset: auto 0 0; height: 35%; background: linear-gradient(transparent, #062c2066); pointer-events: none; }
+.hero-banner-slide { position: absolute; inset: 0; height: 100%; width: 100%; overflow: hidden; }
+.hero-banner-slide[hidden] { display: none; }
+.hero-banner-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero-banner-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid #fff; border-radius: 50%; background: #063d2bed; color: #fff; cursor: pointer; box-shadow: 0 3px 12px #0002; }
+.hero-banner-arrow svg { width: 22px; }
+.hero-banner-prev { left: 24px; }
+.hero-banner-next { right: 24px; }
+.hero-banner-overlay { position: absolute; z-index: 1; bottom: 28px; left: 0; right: 0; padding-inline: 16px; display: flex; justify-content: center; pointer-events: none; }
+.hero-banner-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; pointer-events: auto; }
+.hero-banner-actions .button { box-shadow: 0 3px 12px #0004; }
+.hero-banners + .feature-strip { margin-top: 24px; }
+@media (max-width: 760px) {
+    .hero-banner-stage { height: clamp(220px, 50vw, 340px); }
+    .hero-banner-prev { left: 8px; }
+    .hero-banner-next { right: 8px; }
+    .hero-banner-arrow { width: 36px; height: 36px; }
+    .hero-banner-overlay { bottom: 16px; padding-inline: 10px; }
+    .hero-banner-actions { gap: 8px; }
+    .hero-banner-actions .button { min-height: 44px; padding: 0 10px; gap: 6px; font-size: 12px; }
+}

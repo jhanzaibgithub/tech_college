@@ -18,7 +18,12 @@
                             <td><img class="admin-thumb" src="{{ asset($newsEvent->image_path ?: 'data/campus-building.png') }}" alt="{{ $newsEvent->title }}"></td>
                             <td><strong>{{ $newsEvent->title }}</strong><small>{{ Str::limit($newsEvent->summary, 80) }}</small></td>
                             <td>{{ $newsEvent->event_date?->format('M d, Y') ?: 'No date' }}</td>
-                            <td>{{ $newsEvent->is_active ? 'Active' : 'Hidden' }}</td>
+                            <td>
+                                {{ $newsEvent->is_active ? 'Active' : 'Hidden' }}
+                                @if($newsEvent->is_ticker)
+                                    <span style="display:inline-block;margin-left:6px;padding:2px 7px;border-radius:4px;background:#c5962e;color:#fff;font-size:11px;font-weight:900;">TICKER</span>
+                                @endif
+                            </td>
                             <td class="admin-actions">
                                 <a href="{{ route('admin.news-events.edit', $newsEvent) }}"><i data-lucide="pencil"></i></a>
                                 <form method="POST" action="{{ route('admin.news-events.destroy', $newsEvent) }}" data-confirm="This news or event item will be deleted.">@csrf @method('DELETE')<button type="submit"><i data-lucide="trash-2"></i></button></form>

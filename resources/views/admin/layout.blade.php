@@ -17,6 +17,7 @@
         </a>
         <nav class="admin-nav">
             <a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="{{ route('admin.banners.index') }}" @class(['active' => request()->routeIs('admin.banners.*')])><i data-lucide="images"></i> Banners</a>
             <a href="{{ route('admin.courses.index') }}" @class(['active' => request()->routeIs('admin.courses.*')])><i data-lucide="book-open"></i> Courses</a>
             <a href="{{ route('admin.testimonials.index') }}" @class(['active' => request()->routeIs('admin.testimonials.*')])><i data-lucide="message-square-quote"></i> Testimonials</a>
             <a href="{{ route('admin.news-events.index') }}" @class(['active' => request()->routeIs('admin.news-events.*')])><i data-lucide="newspaper"></i> News & Events</a>

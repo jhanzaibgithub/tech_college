@@ -1,0 +1,83 @@
+/* Homepage presentation, kept separate from course detail and admin styles. */
+main section[id], footer[id] { scroll-margin-top: 24px; }
+:is(a, button, [tabindex]):focus-visible { outline: 3px solid #b78015; outline-offset: 5px; }
+
+.news-ticker-bar { margin: 32px 0 0; background: #f5d477; min-height: 50px; }
+.news-ticker-track-wrap { min-width: 0; }
+.news-ticker-track { width: max-content; animation: news-left-to-right 65s linear infinite; }
+.news-ticker-group { display: flex; flex-shrink: 0; min-width: 100vw; justify-content: space-around; }
+.news-ticker-item { flex-shrink: 0; min-height: 50px; font-size: 14px; }
+.news-ticker-label { color: #f7dc99; }
+.news-ticker-contact { background: #edc562; color: var(--deep); font-size: 12px; }
+.ticker-toggle { flex-shrink: 0; width: 44px; border: 0; border-left: 1px solid #d1ac52; background: transparent; color: var(--green); cursor: pointer; font-size: 14px; }
+.news-ticker-bar:hover .news-ticker-track, .news-ticker-bar:focus-within .news-ticker-track, .news-ticker-bar.is-paused .news-ticker-track { animation-play-state: paused; }
+@keyframes news-left-to-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.courses-section { padding: 76px 0 64px; }
+.home-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 32px; }
+.section-kicker { margin: 0 0 12px; color: #886218; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+.home-section-heading h2 { margin: 0 0 14px; color: var(--green); font-size: clamp(29px, 3.2vw, 42px); letter-spacing: -.035em; text-transform: none; }
+.home-section-heading h2 em { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; }
+.home-section-heading p:last-child { margin: 0; color: var(--muted); font-size: 15px; font-weight: 400; }
+.testimonials-cards-section { margin-bottom: 44px; padding: 80px 0 70px; background: linear-gradient(145deg, #e5eee6, #f5f7f1); border-top: 1px solid #d9e3d7; border-bottom: 1px solid #d9e3d7; }
+.testimonials-cards-section .courses-heading { margin-bottom: 36px; }
+.testimonials-cards-section .courses-heading > span { margin-top: 49px; }
+.testimonials-cards-section h2 { margin-bottom: 15px; font-size: clamp(30px, 3.5vw, 44px); }
+.testimonials-cards-section .courses-heading p:last-child { font-size: 15px; font-weight: 400; }
+.tcard-carousel:not(.owl-loaded), .news-carousel:not(.owl-loaded) { display: grid; }
+.tcard-carousel, .news-carousel { width: calc(100% - 48px); margin-inline: 24px; }
+.tcard-carousel.owl-theme .owl-nav, .news-carousel.owl-theme .owl-nav { position: absolute; top: calc(50% - 18px); left: -24px; right: -24px; display: flex; justify-content: space-between; transform: translateY(-50%); margin: 0; pointer-events: none; }
+.tcard-carousel.owl-theme .owl-nav.disabled, .news-carousel.owl-theme .owl-nav.disabled { display: none; }
+.tcard-carousel.owl-theme .owl-nav button, .news-carousel.owl-theme .owl-nav button { width: 46px; height: 46px; border: 1px solid var(--green); pointer-events: auto; }
+.tcard-carousel.owl-theme .owl-nav .owl-prev, .news-carousel.owl-theme .owl-nav .owl-prev { background: #fff !important; color: var(--green) !important; }
+.tcard { position: relative; min-height: 405px; padding: 32px 28px; border: 1px solid #d1decf; border-top: 3px solid var(--green); border-bottom: 3px solid var(--gold); border-radius: 22px; }
+.tcard-photo-wrap, .tcard-photo-wrap img { width: 92px; height: 92px; }
+.tcard-photo-wrap img { border: 4px solid #fff; outline: 1px solid #d7c794; }
+.tcard-name { font-size: 22px; }
+.tcard-role { font-style: normal; font-size: 13px; }
+.tcard-text { width: 100%; flex: 0 0 auto; margin-top: 13px; text-align: center; font-weight: 400; font-size: 15px; line-height: 1.85; overflow-wrap: anywhere; }
+.testimonial-more { display: flex; align-items: center; gap: 18px; margin-top: auto; padding: 12px 0 0; border: 0; background: none; color: var(--green); font: 700 13px 'DM Sans', sans-serif; cursor: pointer; }
+.tcard-text.is-collapsed { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.news-section-home { padding: 64px 0; background: #fff; }
+.stats { padding-top: 32px; padding-bottom: 44px; }
+footer { padding-top: 25px; }
+.footer-grid { grid-template-columns: 1.4fr .8fr .8fr 1fr; gap: 26px; }
+.footer-brand .brand { gap: 8px; }
+.footer-brand .brand img { width: 57px; height: 65px; }
+.footer-brand .brand strong { font-size: 19px; }
+.footer-brand .brand small { font-size: 9px; }
+
+@media (max-width: 1100px) {
+    .news-ticker-contact { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+    .news-ticker-bar { margin-top: 26px; }
+    .news-ticker-label { padding: 0 12px; font-size: 10px; }
+    .news-ticker-label svg { display: none; }
+    .news-ticker-item { font-size: 12px; padding: 0 22px; }
+    .courses-section { padding: 50px 0; }
+    .home-section-heading { gap: 18px; align-items: flex-start; }
+    .home-section-heading h2 { font-size: 29px; }
+    .home-section-heading p:last-child { font-size: 14px; }
+    .section-kicker { font-size: 9px; }
+    .testimonials-cards-section { padding: 55px 0; }
+    .testimonials-cards-section .courses-heading > span { display: none; }
+    .tcard { min-height: 390px; }
+    .footer-brand { grid-column: span 2; }
+}
+
+@media (max-width: 480px) {
+    .home-section-heading { flex-wrap: wrap; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-brand { grid-column: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .news-ticker-track { animation: none; transform: none; }
+    .news-ticker-group[aria-hidden] { display: none; }
+    .news-ticker-track-wrap { overflow-x: auto; }
+    .ticker-toggle { display: none; }
+    .tcard { transition: none; }
+}

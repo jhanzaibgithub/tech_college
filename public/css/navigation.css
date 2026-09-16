@@ -1,0 +1,37 @@
+/* Shared public navigation for home and course detail pages. */
+.home-header { border: 0; z-index: 20; }
+.navigation-band { background: var(--green); border-bottom: 3px solid var(--gold); }
+.navigation-inner { display: flex; align-items: center; gap: 28px; min-height: 94px; }
+.navigation-band .brand { gap: 10px; }
+.navigation-band .brand img { width: 58px; height: 64px; object-fit: cover; object-position: center; mix-blend-mode: normal; background: #fff; border: 1px solid #e3d7aa; border-radius: 5px; }
+.navigation-band .brand strong { color: #fff; font-size: 19px; }
+.navigation-band .brand small { color: #eef4eb; font-size: 9px; }
+.home-header nav { flex: 1; min-width: 0; min-height: 68px; justify-content: space-between; gap: 16px; color: #fff; font-size: 14px; }
+.home-header nav a:not(.button) { padding: 21px 0; white-space: nowrap; }
+.home-header nav a:not(.button):hover, .home-header nav a.active { color: #f1cf81; }
+.home-header nav a:not(.button)::after { bottom: 12px; background: #f1cf81; }
+.home-header nav .button { min-height: 44px; padding: 0 21px; font-size: 14px; }
+
+@media (max-width: 1100px) {
+    .home-header nav { font-size: 13px; gap: 12px; }
+    .home-header nav .button { padding: 0 14px; font-size: 13px; }
+    .navigation-inner { gap: 20px; }
+    .navigation-band .brand strong { font-size: 16px; }
+    .navigation-band .brand img { width: 50px; height: 58px; }
+}
+
+@media (max-width: 960px) {
+    .navigation-inner { flex-wrap: wrap; justify-content: space-between; gap: 0; min-height: 82px; padding-top: 10px; padding-bottom: 10px; }
+    .home-header .menu-toggle { display: grid; background: transparent; color: #fff; border-color: #ffffff70; }
+    .home-header nav { flex: 0 0 100%; display: none; padding: 12px 0 8px; }
+    .home-header nav.open { display: grid; gap: 0; }
+    .home-header nav a:not(.button) { padding: 13px 8px; font-size: 15px; border-bottom: 1px solid #ffffff20; }
+    .home-header nav a:not(.button)::after { display: none; }
+    .home-header nav .button { margin-top: 14px; }
+}
+
+@media (min-width: 961px) {
+    .home-header .menu-toggle { display: none; }
+}
+
+.home-header :is(a, button):focus-visible { outline: 3px solid #f1cf81; outline-offset: 5px; }

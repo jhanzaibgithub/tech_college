@@ -30,6 +30,13 @@ return [
 
     'disks' => [
 
+        'banners' => [
+            'driver' => 'local',
+            'root' => public_path('data/banners'),
+            'visibility' => 'public',
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

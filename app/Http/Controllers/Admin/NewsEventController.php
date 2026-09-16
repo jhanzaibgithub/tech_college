@@ -86,18 +86,20 @@ class NewsEventController extends Controller
     private function payload(Request $request, ?NewsEvent $newsEvent = null): array
     {
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'summary' => ['required', 'string', 'max:1000'],
+            'title'      => ['required', 'string', 'max:255'],
+            'summary'    => ['required', 'string', 'max:1000'],
             'event_date' => ['nullable', 'date'],
-            'image' => ['nullable', 'image', 'max:4096'],
-            'is_active' => ['nullable'],
+            'image'      => ['nullable', 'image', 'max:4096'],
+            'is_active'  => ['nullable'],
+            'is_ticker'  => ['nullable'],
         ]);
 
         $payload = [
-            'title' => $data['title'],
-            'summary' => $data['summary'],
+            'title'      => $data['title'],
+            'summary'    => $data['summary'],
             'event_date' => $data['event_date'] ?? null,
-            'is_active' => isset($data['is_active']),
+            'is_active'  => isset($data['is_active']),
+            'is_ticker'  => isset($data['is_ticker']),
             'sort_order' => $newsEvent?->sort_order ?? ((int) NewsEvent::max('sort_order') + 1),
         ];
 

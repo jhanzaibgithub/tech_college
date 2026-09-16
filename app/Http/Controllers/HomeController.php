@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\CourseService;
+use App\Models\Banner;
 use App\Models\NewsEvent;
 use App\Models\StudentTestimonial;
 use Illuminate\View\View;
@@ -24,6 +25,7 @@ class HomeController extends Controller
         ];
 
         $courses = $this->courses->publicCourses();
+        $banners = Banner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
 
         $stats = [
             ['value' => '1500+', 'label' => 'Trained students', 'icon' => 'users'],
@@ -45,7 +47,14 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('welcome', compact('features', 'courses', 'stats', 'testimonials', 'newsEvents'));
+        $tickerItems = NewsEvent::query()
+            ->where('is_active', true)
+            ->where('is_ticker', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('welcome', compact('features', 'courses', 'banners', 'stats', 'testimonials', 'newsEvents', 'tickerItems'));
     }
 
     public function course(string $slug): View

@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/course-slider.css') }}">
 </head>
 <body>
     <div class="topbar"><div class="container topbar-inner"><span><i data-lucide="mail"></i> techcollegepak@gmail.com</span><span><i data-lucide="phone"></i> 051-4627600</span><span class="follow">Follow Us: <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a><a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a><a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a></span></div></div>
-    <header class="site-header"><div class="container nav-wrap"><a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a><button class="menu-toggle" aria-label="Open menu"><i data-lucide="menu"></i></button><nav><a href="{{ route('home') }}">Home</a><a href="{{ route('home') }}#about">About Us</a><a class="active" href="{{ route('home') }}#courses">Courses</a><a href="{{ route('home') }}#admissions">Admissions</a><a href="{{ route('home') }}#placement">Placement</a><a href="{{ route('home') }}#about">Why Us?</a><a href="{{ route('home') }}#contact">Contact Us</a><a class="button button-small" href="{{ route('home') }}#admissions">Apply Now <i data-lucide="arrow-up-right"></i></a></nav></div></header>
+    @include('partials.site-header')
     <main>
         <section class="course-detail-hero">
             <div class="container course-detail-grid">
@@ -52,12 +54,8 @@
         </section>
         <section class="section courses-section related-courses">
             <div class="container">
-                <div class="section-heading courses-heading"><span></span><div><h2>Related Courses</h2><p>Explore More Skill-Focused Programs</p></div><span></span></div>
-                <div class="course-grid course-carousel owl-carousel owl-theme">
-                    @foreach ($courses as $item)
-                        <article class="course-card"><div class="course-visual"><div class="course-image-carousel owl-carousel owl-theme">@forelse ($item->images as $image)<img src="{{ asset($image->path) }}" alt="{{ $image->alt_text ?? $item->title }}">@empty<img src="{{ asset('data/courses/technical-skills.png') }}" alt="{{ $item->title }}">@endforelse</div><span class="course-icon"><i data-lucide="{{ $item->icon }}"></i></span></div><div class="course-body"><h3>{{ $item->title }}</h3><p>{{ $item->short_description }}</p><a href="{{ route('courses.show', $item->slug) }}">View Course <i data-lucide="arrow-right"></i></a></div></article>
-                    @endforeach
-                </div>
+                <div class="course-list-heading"><h2>Related Courses</h2></div>
+                @include('partials.course-slider', ['sliderCourses' => $courses, 'sliderId' => 'related-courses-slider', 'sliderLabel' => 'Related courses'])
             </div>
         </section>
     </main>
@@ -88,6 +86,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons();document.querySelector('.menu-toggle')?.addEventListener('click',()=>document.querySelector('.nav-wrap nav')?.classList.toggle('open'));document.querySelectorAll('.nav-wrap nav a').forEach((link)=>link.addEventListener('click',()=>document.querySelector('.nav-wrap nav')?.classList.remove('open')));const enrollmentModal=document.querySelector('[data-enrollment-modal]');const openEnrollment=()=>{enrollmentModal?.classList.add('open');enrollmentModal?.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');};const closeEnrollment=()=>{enrollmentModal?.classList.remove('open');enrollmentModal?.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open');};document.querySelectorAll('[data-open-enrollment]').forEach((button)=>button.addEventListener('click',openEnrollment));document.querySelectorAll('[data-close-enrollment]').forEach((button)=>button.addEventListener('click',closeEnrollment));document.addEventListener('keydown',(event)=>{if(event.key==='Escape')closeEnrollment();});@if ($errors->any())openEnrollment();@endif if(window.jQuery&&jQuery.fn.owlCarousel){const detailCount=jQuery('.detail-carousel .detail-slide').length;jQuery('.detail-carousel').owlCarousel({items:1,loop:detailCount>1,nav:detailCount>1,dots:detailCount>1,autoplay:detailCount>1,autoplayTimeout:3600,autoplayHoverPause:true});const courseCount=jQuery('.course-carousel > .course-card').length;if(courseCount>5){jQuery('.course-carousel').owlCarousel({loop:true,margin:28,nav:false,dots:true,autoplay:true,autoplayTimeout:3500,autoplayHoverPause:true,responsive:{0:{items:1,margin:14},560:{items:2,margin:18},900:{items:3,margin:22},1180:{items:5,margin:28}}});}jQuery('.course-image-carousel').each(function(){const imageCount=jQuery(this).find('img').length;jQuery(this).owlCarousel({items:1,loop:imageCount>1,nav:false,dots:false,autoplay:imageCount>1,autoplayTimeout:2600,mouseDrag:false,touchDrag:false,animateOut:'fadeOut'});});lucide.createIcons();}</script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons();const enrollmentModal=document.querySelector('[data-enrollment-modal]');const openEnrollment=()=>{enrollmentModal?.classList.add('open');enrollmentModal?.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');};const closeEnrollment=()=>{enrollmentModal?.classList.remove('open');enrollmentModal?.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open');};document.querySelectorAll('[data-open-enrollment]').forEach((button)=>button.addEventListener('click',openEnrollment));document.querySelectorAll('[data-close-enrollment]').forEach((button)=>button.addEventListener('click',closeEnrollment));document.addEventListener('keydown',(event)=>{if(event.key==='Escape')closeEnrollment();});@if ($errors->any())openEnrollment();@endif if(window.jQuery&&jQuery.fn.owlCarousel){const detailCount=jQuery('.detail-carousel .detail-slide').length;jQuery('.detail-carousel').owlCarousel({items:1,loop:detailCount>1,nav:detailCount>1,dots:detailCount>1,autoplay:detailCount>1,autoplayTimeout:3600,autoplayHoverPause:true});lucide.createIcons();}</script>
+    <script src="{{ asset('js/navigation.js') }}"></script>
+    <script src="{{ asset('js/course-slider.js') }}"></script>
 </body>
 </html>
