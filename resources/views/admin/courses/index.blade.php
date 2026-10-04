@@ -10,13 +10,14 @@
         </div>
         <div class="admin-table-wrap">
             <table class="admin-table">
-                <thead><tr><th>Order</th><th>Preview</th><th>Title</th><th>Icon</th><th>Status</th><th>Images</th><th>Actions</th></tr></thead>
+                <thead><tr><th>Order</th><th>Preview</th><th>Title</th><th>Rating</th><th>Icon</th><th>Status</th><th>Images</th><th>Actions</th></tr></thead>
                 <tbody data-sortable-courses data-reorder-url="{{ route('admin.courses.reorder') }}">
                     @forelse ($courses as $course)
                         <tr draggable="true" data-course-id="{{ $course->id }}">
                             <td class="drag-handle"><i data-lucide="grip-vertical"></i></td>
-                            <td><img class="admin-thumb" src="{{ asset($course->images->first()?->path ?? 'data/courses/technical-skills.png') }}" alt="{{ $course->title }}"></td>
+                            <td><img class="admin-thumb" src="{{ $course->primaryImageUrl() }}" data-fallback="{{ asset(\App\Models\CourseImage::FALLBACK) }}" loading="lazy" alt="{{ $course->title }}"></td>
                             <td><strong>{{ $course->title }}</strong><small>{{ $course->slug }}</small></td>
+                            <td>@if($course->rating)<span class="admin-stars" aria-label="{{ $course->rating }} out of 5">{{ str_repeat('★', $course->rating) }}<i>{{ str_repeat('★', 5 - $course->rating) }}</i></span>@else<small>Not rated</small>@endif</td>
                             <td><i data-lucide="{{ $course->icon }}"></i></td>
                             <td>{{ $course->is_active ? 'Active' : 'Hidden' }}</td>
                             <td>{{ $course->images->count() }}</td>
@@ -26,7 +27,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7">No courses found.</td></tr>
+                        <tr><td colspan="8">No courses found.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -36,6 +37,12 @@
 
 @push('scripts')
 <script>
+    document.querySelectorAll('img[data-fallback]').forEach((img) => {
+        const fallback = () => { if (img.src !== img.dataset.fallback) img.src = img.dataset.fallback; };
+        img.addEventListener('error', fallback, { once: true });
+        if (img.complete && !img.naturalWidth) fallback();
+    });
+
     const tbody = document.querySelector('[data-sortable-courses]');
     let draggedRow = null;
 

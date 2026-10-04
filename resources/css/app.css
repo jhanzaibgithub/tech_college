@@ -47,7 +47,7 @@ nav a:not(.button) { position: relative; }
     overflow: hidden;
     background:
         linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.94) 35%, rgba(255,255,255,.58) 53%, rgba(255,255,255,.1) 74%),
-        url('/data/hero-students-placeholder.png') right center / auto 100% no-repeat,
+        url('../../public/data/hero-students-placeholder.png') right center / auto 100% no-repeat,
         #f5f7f5;
 }
 .hero::after { content: none; }
@@ -369,7 +369,7 @@ tr.dragging { opacity: .45; }
     .hero {
         background:
             linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.95) 43%, rgba(255,255,255,.68) 62%, rgba(255,255,255,.24) 100%),
-            url('/data/hero-students-placeholder.png') right center / auto 100% no-repeat,
+            url('../../public/data/hero-students-placeholder.png') right center / auto 100% no-repeat,
             #f5f7f5;
     }
     .hero-grid { min-height: 405px; grid-template-columns: 54% 46%; }
@@ -417,7 +417,7 @@ tr.dragging { opacity: .45; }
     h1 { font-size: 40px; }
     .hero-text { font-size: 14px; }
     .hero-actions { flex-direction: column; gap: 12px; align-items: stretch; }
-    .hero { background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.87) 58%, rgba(255,255,255,.28) 100%), url('/data/hero-students-placeholder.png') center bottom / auto 52% no-repeat, #f5f7f5; }
+    .hero { background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.87) 58%, rgba(255,255,255,.28) 100%), url('../../public/data/hero-students-placeholder.png') center bottom / auto 52% no-repeat, #f5f7f5; }
     .hero-art { min-height: 220px; }
     .placement-badge { top: 4px; right: 3%; transform: scale(.75); transform-origin: top right; }
     .feature-strip { grid-template-columns: repeat(2, 1fr); margin-top: -18px; padding: 8px; border-radius: 16px; }

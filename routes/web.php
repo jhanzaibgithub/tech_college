@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EnrollmentController as PublicEnrollmentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -24,8 +27,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/courses', [HomeController::class, 'courses'])->name('courses.index');
 Route::get('/courses/{slug}', [HomeController::class, 'course'])->name('courses.show');
-Route::post('/courses/{slug}/enroll', [PublicEnrollmentController::class, 'store'])->name('courses.enroll');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/enroll', [PublicEnrollmentController::class, 'apply'])->name('enroll.store');
+    Route::post('/courses/{slug}/enroll', [PublicEnrollmentController::class, 'store'])->name('courses.enroll');
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+});
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -46,6 +56,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::patch('/enrollments/{enrollment}', [EnrollmentController::class, 'update'])->name('enrollments.update');
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
+        Route::get('/messages', [ContactMessageController::class, 'index'])->name('messages.index');
+        Route::patch('/messages/{message}', [ContactMessageController::class, 'update'])->name('messages.update');
+        Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
+        Route::get('/settings/{section}', [SiteSettingController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings/{section}', [SiteSettingController::class, 'update'])->name('settings.update');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });

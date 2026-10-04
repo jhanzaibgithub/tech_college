@@ -12,6 +12,7 @@
             <div class="admin-card-head">
                 <div><h2>{{ $course->exists ? 'Edit Course' : 'Add Course' }}</h2><p>Manage title, icon, descriptions and course images.</p></div>
             </div>
+            @include('admin.settings._errors')
 
             <div class="admin-fields">
                 <label>Course Title <input type="text" name="title" value="{{ old('title', $course->title) }}" required></label>
@@ -19,6 +20,21 @@
                 <label class="admin-check admin-active"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $course->is_active ?? true))> Active course</label>
             </div>
 
+            <fieldset class="admin-full rating-field">
+                <legend>Rating / Stars</legend>
+                @php($currentRating = (int) old('rating', $course->rating))
+                <div class="star-selector" data-star-selector>
+                    <label class="star-none"><input type="radio" name="rating" value="" @checked($currentRating === 0)> <span>No rating</span></label>
+                    @for ($star = 1; $star <= 5; $star++)
+                        <label class="star-option" title="{{ $star }} {{ Str::plural('star', $star) }}">
+                            <input type="radio" name="rating" value="{{ $star }}" @checked($currentRating === $star)>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.4 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9z"/></svg>
+                            <span class="sr-only">{{ $star }} {{ Str::plural('star', $star) }}</span>
+                        </label>
+                    @endfor
+                </div>
+                <small class="field-hint">Shown on the homepage, course list and course detail page. Leave on "No rating" to hide stars.</small>
+            </fieldset>
             <div class="admin-full">
                 <label>Short Overview <input type="text" name="short_description" value="{{ old('short_description', $course->short_description) }}" maxlength="500" placeholder="2-3 words for course card, e.g. Job-Ready Skills" required></label>
             </div>
@@ -50,7 +66,7 @@
                 <div class="existing-images">
                     @foreach ($course->images as $image)
                         <label>
-                            <img src="{{ asset($image->path) }}" alt="{{ $image->alt_text ?? $course->title }}">
+                            <img src="{{ $image->url() }}" alt="{{ $image->alt_text ?? $course->title }}">
                             <span><input type="checkbox" name="delete_images[]" value="{{ $image->id }}"> Delete</span>
                         </label>
                     @endforeach
@@ -66,6 +82,16 @@
 
 @push('scripts')
 <script>
+    document.querySelectorAll('[data-star-selector]').forEach((group) => {
+        const options = Array.from(group.querySelectorAll('.star-option'));
+        const paint = () => {
+            const value = Number(group.querySelector('input:checked')?.value || 0);
+            options.forEach((option, index) => option.classList.toggle('on', index < value));
+        };
+        group.addEventListener('change', paint);
+        paint();
+    });
+
     const iconInput = document.querySelector('[data-icon-input]');
     document.querySelectorAll('[data-icon]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -96,39 +122,7 @@
         }
     });
 
-    const imageInput = document.querySelector('[data-image-input]');
-    const previewGrid = document.querySelector('[data-preview-grid]');
-    let selectedFiles = [];
-
-    imageInput?.addEventListener('change', () => {
-        selectedFiles = Array.from(imageInput.files);
-        renderPreviews();
-    });
-
-    function renderPreviews() {
-        const transfer = new DataTransfer();
-        previewGrid.innerHTML = '';
-
-        selectedFiles.forEach((file, index) => {
-            transfer.items.add(file);
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const item = document.createElement('div');
-                item.className = 'preview-item';
-                item.innerHTML = `<img src="${event.target.result}" alt=""><button type="button" aria-label="Remove image">&times;</button>`;
-                item.querySelector('button').addEventListener('click', () => {
-                    selectedFiles.splice(index, 1);
-                    renderPreviews();
-                });
-                previewGrid.appendChild(item);
-            };
-            reader.readAsDataURL(file);
-        });
-
-        imageInput.files = transfer.files;
-    }
-
-    lucide.createIcons();
+    window.lucide?.createIcons();
 </script>
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>

@@ -20,4 +20,12 @@
         }
     });
 
+    // Sticky header: tighten and add a shadow once the top bar has scrolled out of view.
+    const header = document.querySelector('.home-header');
+    const topbar = document.querySelector('.topbar');
+    if (header) {
+        const update = () => header.classList.toggle('is-stuck', window.scrollY > (topbar ? topbar.offsetHeight : 0) + 8);
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    }
 })();

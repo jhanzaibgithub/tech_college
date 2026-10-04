@@ -14,6 +14,7 @@ class Course extends Model
         'title',
         'slug',
         'icon',
+        'rating',
         'short_description',
         'overview',
         'details',
@@ -23,6 +24,7 @@ class Course extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'rating' => 'integer',
     ];
 
     public function images(): HasMany
@@ -38,5 +40,18 @@ class Course extends Model
     public function primaryImage(): ?CourseImage
     {
         return $this->images->first();
+    }
+
+    /** URLs of every usable image (missing files are skipped); the fallback when there are none. */
+    public function imageUrls(): array
+    {
+        $urls = $this->images->filter->existsOnDisk()->map->url()->values()->all();
+
+        return $urls ?: [asset(CourseImage::FALLBACK)];
+    }
+
+    public function primaryImageUrl(): string
+    {
+        return $this->imageUrls()[0];
     }
 }

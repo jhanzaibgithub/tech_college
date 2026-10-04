@@ -1,32 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ $course->title }} at Tech College of Skills Development and Placement.">
-    <title>{{ $course->title }} | Tech College</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+@extends('layouts.public')
+
+@section('title', $course->title . ' | Tech College')
+@section('description', $course->title . ' at Tech College of Skills Development and Placement.')
+
+@push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/course-slider.css') }}">
-</head>
-<body>
-    <div class="topbar"><div class="container topbar-inner"><span><i data-lucide="mail"></i> techcollegepak@gmail.com</span><span><i data-lucide="phone"></i> 051-4627600</span><span class="follow">Follow Us: <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a><a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a><a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a></span></div></div>
-    @include('partials.site-header')
-    <main>
+    <link rel="stylesheet" href="{{ asset('css/course-slider.css') }}?v={{ filemtime(public_path('css/course-slider.css')) }}">
+@endpush
+
+@section('content')
         <section class="course-detail-hero">
             <div class="container course-detail-grid">
                 <div class="course-detail-copy">
                     <p class="detail-kicker"><i data-lucide="{{ $course->icon }}"></i> {{ $course->title }}</p>
                     <h1>{{ $course->title }}</h1>
+                    @include('partials.stars', ['rating' => $course->rating])
                     <p>{{ $course->short_description ?: $course->overview }}</p>
                 </div>
                 <div class="detail-carousel owl-carousel owl-theme">
                     @foreach ($gallery as $image)
-                        <div class="detail-slide"><img src="{{ asset($image) }}" alt="{{ $course->title }} training image"></div>
+                        <div class="detail-slide"><img src="{{ $image }}" data-fallback="{{ asset(\App\Models\CourseImage::FALLBACK) }}" alt="{{ $course->title }} training image {{ $loop->iteration }}"></div>
                     @endforeach
                 </div>
             </div>
@@ -44,50 +38,32 @@
                         <li><i data-lucide="circle-check"></i>Recognized certification support</li>
                         <li><i data-lucide="circle-check"></i>Placement-focused preparation</li>
                     </ul>
+                    <div class="detail-enroll">
+                        <button class="button button-gold" type="button" data-open-enrollment data-course-id="{{ $course->id }}">Apply Now <i data-lucide="arrow-right"></i></button>
+                    </div>
                 </article>
             </div>
         </section>
-        <section class="detail-apply-strip">
-            <div class="container">
-                <button class="button button-gold" type="button" data-open-enrollment>Apply Now <i data-lucide="arrow-right"></i></button>
-            </div>
-        </section>
-        <section class="section courses-section related-courses">
-            <div class="container">
-                <div class="course-list-heading"><h2>Related Courses</h2></div>
-                @include('partials.course-slider', ['sliderCourses' => $courses, 'sliderId' => 'related-courses-slider', 'sliderLabel' => 'Related courses'])
-            </div>
-        </section>
-    </main>
-    <div class="enrollment-modal" data-enrollment-modal aria-hidden="true">
-        <div class="enrollment-modal-backdrop" data-close-enrollment></div>
-        <div class="enrollment-modal-panel" role="dialog" aria-modal="true" aria-labelledby="enrollment-title">
-            <button class="enrollment-modal-close" type="button" data-close-enrollment aria-label="Close enrollment form"><i data-lucide="x"></i></button>
-            <h2 id="enrollment-title">Apply For {{ $course->title }}</h2>
-            <p>Share your details and our team will contact you about this course.</p>
-            @if ($errors->any())
-                <div class="admin-error-list">
-                    @foreach ($errors->all() as $error)
-                        <p>{{ $error }}</p>
-                    @endforeach
+        @if ($courses->isNotEmpty())
+            <section class="section courses-section related-courses">
+                <div class="container">
+                    @include('partials.course-slider', ['sliderCourses' => $courses, 'sliderId' => 'related-courses-slider', 'sliderHeading' => 'Related Courses', 'sliderKicker' => 'KEEP EXPLORING'])
                 </div>
-            @endif
-            <form class="enrollment-form" method="POST" action="{{ route('courses.enroll', $course->slug) }}">
-                @csrf
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="Full name" required>
-                <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Phone number" required>
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address">
-                <textarea name="message" rows="3" placeholder="Message">{{ old('message') }}</textarea>
-                <button class="button" type="submit">Apply<i data-lucide="arrow-right"></i></button>
-            </form>
-        </div>
-    </div>
-    <footer id="contact"><div class="container footer-grid"><div class="footer-brand"><a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a><p>Empowering youth with skills, knowledge and opportunities to build a better future.</p></div><div><h3>Quick links</h3><a href="{{ route('home') }}#about">About us</a><a href="{{ route('home') }}#courses">Courses</a><a href="{{ route('home') }}#admissions">Admissions</a><a href="{{ route('home') }}#placement">Placement</a></div><div><h3>Our programs</h3><a href="{{ route('home') }}#courses">Technical skills</a><a href="{{ route('home') }}#courses">IT & digital skills</a><a href="{{ route('home') }}#courses">Vocational training</a><a href="{{ route('home') }}#courses">Soft skills</a></div><div><h3>Get in touch</h3><p><i data-lucide="map-pin"></i> Hakim Khan Plaza,<br>Main GT Road, Rawat,<br>Rawalpindi, Pakistan</p><p><i data-lucide="phone"></i> 051-4627600</p><p><i data-lucide="mail"></i> techcollegepak@gmail.com</p></div></div><div class="copyright">&copy; {{ date('Y') }} Tech College of Skills Development & Placement. All rights reserved.</div></footer>
+            </section>
+        @endif
+@endsection
+
+@push('vendor-scripts')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>lucide.createIcons();const enrollmentModal=document.querySelector('[data-enrollment-modal]');const openEnrollment=()=>{enrollmentModal?.classList.add('open');enrollmentModal?.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');};const closeEnrollment=()=>{enrollmentModal?.classList.remove('open');enrollmentModal?.setAttribute('aria-hidden','true');document.body.classList.remove('modal-open');};document.querySelectorAll('[data-open-enrollment]').forEach((button)=>button.addEventListener('click',openEnrollment));document.querySelectorAll('[data-close-enrollment]').forEach((button)=>button.addEventListener('click',closeEnrollment));document.addEventListener('keydown',(event)=>{if(event.key==='Escape')closeEnrollment();});@if ($errors->any())openEnrollment();@endif if(window.jQuery&&jQuery.fn.owlCarousel){const detailCount=jQuery('.detail-carousel .detail-slide').length;jQuery('.detail-carousel').owlCarousel({items:1,loop:detailCount>1,nav:detailCount>1,dots:detailCount>1,autoplay:detailCount>1,autoplayTimeout:3600,autoplayHoverPause:true});lucide.createIcons();}</script>
-    <script src="{{ asset('js/navigation.js') }}"></script>
-    <script src="{{ asset('js/course-slider.js') }}"></script>
-</body>
-</html>
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('js/course-slider.js') }}?v={{ filemtime(public_path('js/course-slider.js')) }}"></script>
+    <script>
+        if (window.jQuery && jQuery.fn.owlCarousel) {
+            const detailCount = jQuery('.detail-carousel .detail-slide').length;
+            jQuery('.detail-carousel').owlCarousel({items: 1, loop: detailCount > 1, nav: detailCount > 1, dots: detailCount > 1, autoplay: detailCount > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches, autoplayTimeout: 3600, autoplayHoverPause: true});
+        }
+    </script>
+@endpush

@@ -113,14 +113,14 @@ class BannerTest extends TestCase
             ->assertDontSee('data/banners/hidden.jpg', false)
             ->assertSee('Next banner')
             ->assertDontSee('Pause slideshow')
-            ->assertSee('Explore Courses')->assertSee('Admissions Open')
+            ->assertSee('Explore Courses')->assertSee('Enrolled now')
             ->assertDontSee('Build your skills')->assertDontSee('empowers youth with practical training');
     }
 
     public function test_empty_and_single_banner_states_keep_actions_without_carousel_controls(): void
     {
         $this->get('/')->assertOk()->assertSee('data/hero-students-placeholder.png', false)
-            ->assertSee('Explore Courses')->assertSee('Admissions Open')->assertDontSee('Next banner');
+            ->assertSee('Explore Courses')->assertSee('Enrolled now')->assertDontSee('Next banner');
         Banner::create(['title' => 'Only banner', 'image_path' => 'only.jpg', 'is_active' => true, 'sort_order' => 1]);
         $this->get('/')->assertOk()->assertSee('data/banners/only.jpg', false)
             ->assertDontSee('data/hero-students-placeholder.png', false)->assertDontSee('Next banner');

@@ -42,17 +42,17 @@
     </section>
     <section class="admin-card">
         <div class="admin-card-head">
-            <div><h2>Latest Courses</h2><p>Recently added or updated programs.</p></div>
+            <div><h2>Top Courses</h2><p>Top 5 programs by star rating.</p></div>
             <a class="admin-button" href="{{ route('admin.courses.create') }}"><i data-lucide="plus"></i> Add Course</a>
         </div>
         <div class="admin-table-wrap">
             <table class="admin-table">
-                <thead><tr><th>Course</th><th>Icon</th><th>Status</th><th>Images</th><th>Updated</th></tr></thead>
+                <thead><tr><th>Course</th><th>Rating</th><th>Icon</th><th>Status</th><th>Images</th><th>Updated</th></tr></thead>
                 <tbody>
-                    @forelse ($latestCourses as $course)
-                        <tr><td>{{ $course->title }}</td><td><i data-lucide="{{ $course->icon }}"></i></td><td>{{ $course->is_active ? 'Active' : 'Hidden' }}</td><td>{{ $course->images->count() }}</td><td>{{ $course->updated_at->diffForHumans() }}</td></tr>
+                    @forelse ($topCourses as $course)
+                        <tr><td>{{ $course->title }}</td><td>@if($course->rating)<span class="admin-stars" aria-label="{{ $course->rating }} out of 5">{{ str_repeat('★', $course->rating) }}<i>{{ str_repeat('★', 5 - $course->rating) }}</i></span>@else<small>Not rated</small>@endif</td><td><i data-lucide="{{ $course->icon }}"></i></td><td>{{ $course->is_active ? 'Active' : 'Hidden' }}</td><td>{{ $course->images->count() }}</td><td>{{ $course->updated_at->diffForHumans() }}</td></tr>
                     @empty
-                        <tr><td colspan="5">No courses yet.</td></tr>
+                        <tr><td colspan="6">No courses yet.</td></tr>
                     @endforelse
                 </tbody>
             </table>

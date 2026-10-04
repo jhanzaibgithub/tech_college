@@ -2,7 +2,7 @@
     <div class="hero-banner-stage">
         @forelse ($banners as $banner)
             <div class="hero-banner-slide" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $banners->count() }}" @if(!$loop->first) hidden @endif>
-                <img src="{{ $banner->imageUrl() }}" alt="{{ $banner->title }}" @if($loop->first) fetchpriority="high" @else loading="lazy" @endif>
+                <img src="{{ $banner->imageUrl() }}" data-fallback="{{ asset('data/campus-building.png') }}" alt="{{ $banner->title }}" @if($loop->first) fetchpriority="high" @else loading="lazy" @endif>
             </div>
         @empty
             <div class="hero-banner-slide" role="group" aria-label="Tech College">
@@ -14,9 +14,14 @@
             <button class="hero-banner-arrow hero-banner-next" type="button" aria-label="Next banner" data-banner-next><i data-lucide="arrow-right"></i></button>
         @endif
         <div class="hero-banner-overlay">
-            <div class="hero-banner-actions">
-                <a class="button" href="#courses">Explore Courses <i data-lucide="arrow-right"></i></a>
-                <a class="button button-gold" href="#admissions">Admissions Open <i data-lucide="graduation-cap"></i></a>
+            <div class="container hero-copy">
+                @if ($site['hero']['kicker'])<p class="hero-kicker">{{ $site['hero']['kicker'] }}</p>@endif
+                <h1>{{ $site['hero']['title'] }}</h1>
+                @if ($site['hero']['text'])<p class="hero-text">{{ $site['hero']['text'] }}</p>@endif
+                <div class="hero-banner-actions">
+                    <button class="button button-gold hero-cta" type="button" data-open-enrollment>Enrolled now <i data-lucide="graduation-cap"></i></button>
+                    <a class="button button-ghost" href="#courses">Explore Courses <i data-lucide="arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </div>

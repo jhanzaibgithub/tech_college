@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Enrollment;
 use App\Services\EnrollmentService;
 use Illuminate\Http\RedirectResponse;
@@ -17,12 +18,22 @@ class EnrollmentController extends Controller
 
     public function index(Request $request): View
     {
-        $status = $request->query('status', 'all');
+        $filters = $request->validate([
+            'q' => ['nullable', 'string', 'max:100'],
+            'course_id' => ['nullable', 'integer'],
+            'status' => ['nullable', 'in:all,new,confirmed,completed'],
+            'period' => ['nullable', 'in:today,week,month,custom'],
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
+        ]);
 
         return view('admin.enrollments.index', [
-            'enrollments' => $this->enrollments->filtered($status),
+            'enrollments' => $this->enrollments->filtered($filters),
             'statuses' => $this->enrollments->statuses(),
-            'status' => $status,
+            'statusCounts' => $this->enrollments->statusCounts(),
+            'periods' => $this->enrollments->periods(),
+            'courses' => Course::orderBy('title')->get(['id', 'title']),
+            'filters' => $filters,
         ]);
     }
 

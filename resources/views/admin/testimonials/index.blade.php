@@ -15,7 +15,7 @@
                     @forelse ($testimonials as $testimonial)
                         <tr draggable="true" data-testimonial-id="{{ $testimonial->id }}">
                             <td class="drag-handle"><i data-lucide="grip-vertical"></i></td>
-                            <td><img class="admin-avatar-thumb" src="{{ asset($testimonial->image_path ?: 'data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="{{ $testimonial->student_name }}"></td>
+                            <td><img class="admin-avatar-thumb" src="{{ \App\Support\Media::url($testimonial->image_path, \App\Support\Media::AVATAR_FALLBACK) }}" alt="{{ $testimonial->student_name }}"></td>
                             <td><strong>{{ $testimonial->student_name }}</strong><small>{{ $testimonial->designation }}</small></td>
                             <td>{{ Str::limit($testimonial->message, 90) }}</td>
                             <td>{{ $testimonial->is_active ? 'Active' : 'Hidden' }}</td>

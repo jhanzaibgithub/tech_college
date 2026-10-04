@@ -32,7 +32,7 @@
 
             @if ($newsEvent->image_path)
                 <div class="admin-current-image">
-                    <img src="{{ asset($newsEvent->image_path) }}" alt="{{ $newsEvent->title }}">
+                    <img src="{{ \App\Support\Media::url($newsEvent->image_path) }}" alt="{{ $newsEvent->title }}">
                     <span>Current image</span>
                 </div>
             @endif

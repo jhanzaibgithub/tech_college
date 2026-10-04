@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CourseService;
 use App\Models\Banner;
 use App\Models\NewsEvent;
 use App\Models\StudentTestimonial;
+use App\Services\CourseService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -27,13 +29,6 @@ class HomeController extends Controller
         $courses = $this->courses->publicCourses();
         $banners = Banner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
 
-        $stats = [
-            ['value' => '1500+', 'label' => 'Trained students', 'icon' => 'users'],
-            ['value' => '1000+', 'label' => 'Successful placements', 'icon' => 'briefcase'],
-            ['value' => '50+', 'label' => 'Industry partners', 'icon' => 'landmark'],
-            ['value' => '4.8/5', 'label' => 'Student satisfaction', 'icon' => 'star'],
-        ];
-
         $testimonials = StudentTestimonial::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
@@ -54,18 +49,44 @@ class HomeController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('welcome', compact('features', 'courses', 'banners', 'stats', 'testimonials', 'newsEvents', 'tickerItems'));
+        return view('welcome', compact('features', 'courses', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));
+    }
+
+    public function courses(Request $request): View|JsonResponse
+    {
+        $sort = $request->query('sort');
+        $sort = array_key_exists($sort, CourseService::SORTS) ? $sort : 'rating';
+        $courses = $this->courses->paginatePublic($sort);
+
+        // "Load more" and sorting fetch just the cards for a page.
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('partials.course-grid-items', ['courses' => $courses])->render(),
+                'hasMore' => $courses->hasMorePages(),
+                'nextUrl' => $courses->nextPageUrl(),
+                'shown' => $courses->lastItem() ?? 0,
+                'total' => $courses->total(),
+            ]);
+        }
+
+        return view('courses', ['courses' => $courses, 'sort' => $sort, 'sorts' => CourseService::SORTS]);
+    }
+
+    public function about(): View
+    {
+        return view('about');
     }
 
     public function course(string $slug): View
     {
-        $courses = $this->courses->publicCourses();
         $course = $this->courses->findPublicBySlug($slug);
 
         abort_unless($course, 404);
 
-        $gallery = $this->courses->gallery($course);
-
-        return view('course-detail', compact('course', 'courses', 'gallery'));
+        return view('course-detail', [
+            'course' => $course,
+            'courses' => $this->courses->publicCourses()->where('id', '!=', $course->id)->values(),
+            'gallery' => $this->courses->gallery($course),
+        ]);
     }
 }

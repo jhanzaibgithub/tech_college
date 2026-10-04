@@ -32,7 +32,7 @@ class DashboardController extends Controller
             'testimonialCount' => StudentTestimonial::count(),
             'newsEventCount' => NewsEvent::count(),
             'monthlyEnrollments' => $this->enrollments->monthlyCounts(),
-            'latestCourses' => Course::with('images')->latest()->take(5)->get(),
+            'topCourses' => Course::with('images')->orderByRaw('rating is null')->orderByDesc('rating')->orderBy('sort_order')->take(5)->get(),
             'latestEnrollments' => Enrollment::with('course')->latest()->take(5)->get(),
         ]);
     }

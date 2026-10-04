@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Course;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -18,6 +19,25 @@ class CourseService
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
+    }
+
+    public const SORTS = [
+        'rating' => 'Top rated',
+        'newest' => 'Newest first',
+        'title' => 'Title A-Z',
+    ];
+
+    public function paginatePublic(string $sort = 'rating', int $perPage = 6): LengthAwarePaginator
+    {
+        $query = Course::query()->with('images')->where('is_active', true);
+
+        match ($sort) {
+            'newest' => $query->orderByDesc('id'),
+            'title' => $query->orderBy('title'),
+            default => $query->orderByRaw('rating is null')->orderByDesc('rating')->orderBy('sort_order')->orderBy('id'),
+        };
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     public function adminCourses(): Collection
@@ -64,16 +84,9 @@ class CourseService
         $course->delete();
     }
 
-    public function cardImage(Course $course): string
-    {
-        return $course->images->first()?->path ?? 'data/courses/technical-skills.png';
-    }
-
     public function gallery(Course $course): array
     {
-        $paths = $course->images->pluck('path')->all();
-
-        return $paths ?: [$this->cardImage($course)];
+        return $course->imageUrls();
     }
 
     private function payload(array $data, ?Course $course = null): array
@@ -87,6 +100,7 @@ class CourseService
             'title' => $title,
             'slug' => $slug ? Str::slug($slug) : $this->uniqueSlug($title, $course),
             'icon' => $data['icon'] ?? 'book-open',
+            'rating' => ! empty($data['rating']) ? (int) $data['rating'] : null,
             'short_description' => $summary ?: $title,
             'overview' => $overview ?: $summary ?: $title,
             'details' => $data['details'] ?? null,

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\SiteSettingsService;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(SiteSettingsService::class);
     }
 
     /**
@@ -19,6 +21,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('layouts.public', function ($view) {
+            $view->with('footerCourses', \App\Models\Course::query()
+                ->where('is_active', true)
+                ->orderByRaw('rating is null')
+                ->orderByDesc('rating')
+                ->orderBy('sort_order')
+                ->take(5)
+                ->get(['id', 'title', 'slug']));
+        });
+
+        View::composer(['layouts.public', 'welcome', 'about', 'contact', 'course-detail', 'courses'], function ($view) {
+            $view->with('site', app(SiteSettingsService::class)->site());
+        });
     }
 }

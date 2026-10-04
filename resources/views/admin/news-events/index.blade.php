@@ -15,7 +15,7 @@
                     @forelse ($newsEvents as $newsEvent)
                         <tr draggable="true" data-news-event-id="{{ $newsEvent->id }}">
                             <td class="drag-handle"><i data-lucide="grip-vertical"></i></td>
-                            <td><img class="admin-thumb" src="{{ asset($newsEvent->image_path ?: 'data/campus-building.png') }}" alt="{{ $newsEvent->title }}"></td>
+                            <td><img class="admin-thumb" src="{{ \App\Support\Media::url($newsEvent->image_path) }}" alt="{{ $newsEvent->title }}"></td>
                             <td><strong>{{ $newsEvent->title }}</strong><small>{{ Str::limit($newsEvent->summary, 80) }}</small></td>
                             <td>{{ $newsEvent->event_date?->format('M d, Y') ?: 'No date' }}</td>
                             <td>

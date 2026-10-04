@@ -10,11 +10,11 @@ class CourseSeeder extends Seeder
     public function run(): void
     {
         $courses = [
-            ['technical-skills', 'Technical Skills', 'Mechanical, Electrical, IT and more', 'settings-2', 'data/courses/technical-skills.png'],
-            ['it-digital-skills', 'IT & Digital Skills', 'Computer, Software and Online Tools', 'monitor', 'data/courses/it-digital-skills.png'],
-            ['vocational-training', 'Vocational Training', 'Practical Trades & Technical Trades', 'hard-hat', 'data/courses/vocational-training.png'],
-            ['soft-skills', 'Soft Skills', 'Communication, Productivity & Career Growth', 'users-round', 'data/courses/soft-skills.png'],
-            ['placement-preparation', 'Placement Preparation', 'CV Writing, Interview Skills & Job Readiness', 'briefcase-business', 'data/courses/placement-preparation.png'],
+            ['technical-skills', 'Technical Skills', 'Mechanical, Electrical, IT and more', 'settings-2', 'data/banners/technical-training.png'],
+            ['it-digital-skills', 'IT & Digital Skills', 'Computer, Software and Online Tools', 'monitor', 'data/banners/digital-skills.png'],
+            ['vocational-training', 'Vocational Training', 'Practical Trades & Technical Trades', 'hard-hat', 'data/banners/student-learning.png'],
+            ['soft-skills', 'Soft Skills', 'Communication, Productivity & Career Growth', 'users-round', 'data/courses/soft-skill-8G6LpKiU.png'],
+            ['placement-preparation', 'Placement Preparation', 'CV Writing, Interview Skills & Job Readiness', 'briefcase-business', 'data/banners/career-preparation.png'],
         ];
 
         foreach ($courses as $index => [$slug, $title, $description, $icon, $image]) {

@@ -29,7 +29,7 @@
 
             @if ($testimonial->image_path)
                 <div class="admin-current-image">
-                    <img src="{{ asset($testimonial->image_path) }}" alt="{{ $testimonial->student_name }}">
+                    <img src="{{ \App\Support\Media::url($testimonial->image_path, \App\Support\Media::AVATAR_FALLBACK) }}" alt="{{ $testimonial->student_name }}">
                     <span>Current photo</span>
                 </div>
             @endif

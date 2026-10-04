@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-extra.css') }}?v={{ filemtime(public_path('css/admin-extra.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-table.css') }}?v={{ filemtime(public_path('css/admin-table.css')) }}">
 </head>
 <body class="admin-body">
     <aside class="admin-sidebar">
@@ -19,20 +21,16 @@
             <a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])><i data-lucide="layout-dashboard"></i> Dashboard</a>
             <a href="{{ route('admin.banners.index') }}" @class(['active' => request()->routeIs('admin.banners.*')])><i data-lucide="images"></i> Banners</a>
             <a href="{{ route('admin.courses.index') }}" @class(['active' => request()->routeIs('admin.courses.*')])><i data-lucide="book-open"></i> Courses</a>
+            <a href="{{ route('admin.enrollments.index') }}" @class(['active' => request()->routeIs('admin.enrollments.*')])><i data-lucide="user-plus"></i> Enrollments @if(($newEnrollments = \App\Models\Enrollment::where('status', 'new')->count()) > 0)<span class="admin-badge" title="New requests">{{ $newEnrollments }}</span>@endif</a>
             <a href="{{ route('admin.testimonials.index') }}" @class(['active' => request()->routeIs('admin.testimonials.*')])><i data-lucide="message-square-quote"></i> Testimonials</a>
             <a href="{{ route('admin.news-events.index') }}" @class(['active' => request()->routeIs('admin.news-events.*')])><i data-lucide="newspaper"></i> News & Events</a>
-            <div @class(['admin-nav-dropdown', 'active' => request()->routeIs('admin.enrollments.*')])>
-                <button type="button" data-sidebar-dropdown>
-                    <span><i data-lucide="user-plus"></i> {{ request()->routeIs('admin.enrollments.*') ? match(request('status', 'all')) { 'new' => 'New Requests', 'confirmed' => 'Confirmed Students', 'completed' => 'Completed Students', default => 'All Enrollments' } : 'Enrollments' }}</span>
-                    <i data-lucide="chevron-down"></i>
-                </button>
-                <div class="admin-nav-dropdown-menu">
-                    <a href="{{ route('admin.enrollments.index') }}">All Enrollments</a>
-                    <a href="{{ route('admin.enrollments.index', ['status' => 'new']) }}">New Requests</a>
-                    <a href="{{ route('admin.enrollments.index', ['status' => 'confirmed']) }}">Confirmed Students</a>
-                    <a href="{{ route('admin.enrollments.index', ['status' => 'completed']) }}">Completed Students</a>
-                </div>
-            </div>
+            <p class="admin-nav-label">Site content</p>
+            <a href="{{ route('admin.settings.edit', 'hero') }}" @class(['active' => request()->is('admin/settings/hero')])><i data-lucide="sparkles"></i> Homepage Hero</a>
+            <a href="{{ route('admin.settings.edit', 'pages') }}" @class(['active' => request()->is('admin/settings/pages')])><i data-lucide="image"></i> Page Heroes</a>
+            <a href="{{ route('admin.settings.edit', 'stats') }}" @class(['active' => request()->is('admin/settings/stats')])><i data-lucide="chart-bar"></i> Statistics</a>
+            <a href="{{ route('admin.settings.edit', 'about') }}" @class(['active' => request()->is('admin/settings/about')])><i data-lucide="info"></i> About Us</a>
+            <a href="{{ route('admin.settings.edit', 'contact') }}" @class(['active' => request()->is('admin/settings/contact')])><i data-lucide="phone"></i> Contact & Social</a>
+            <a href="{{ route('admin.messages.index') }}" @class(['active' => request()->routeIs('admin.messages.*')])><i data-lucide="mail"></i> Messages @if(($unreadMessages = \App\Models\ContactMessage::where('is_read', false)->count()) > 0)<span class="admin-badge">{{ $unreadMessages }}</span>@endif</a>
         </nav>
     </aside>
     <div class="admin-shell">
@@ -45,8 +43,8 @@
                 <a class="admin-view-site" href="{{ route('home') }}" target="_blank"><i data-lucide="external-link"></i> View Site</a>
                 <div class="admin-user-menu">
                     <button type="button" data-admin-menu>
-                        <img src="{{ asset(auth('admin')->user()->profile_image ?: 'data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Admin">
-                        <span>{{ collect(explode(' ', auth('admin')->user()->name))->take(2)->join(' ') }}</span>
+                        <img src="{{ \App\Support\Media::url(auth('admin')->user()?->profile_image, \App\Support\Media::AVATAR_FALLBACK) }}" alt="Admin">
+                        <span>{{ collect(explode(' ', (string) auth('admin')->user()?->name))->take(2)->join(' ') ?: 'Admin' }}</span>
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="admin-user-dropdown" data-admin-dropdown>
@@ -67,8 +65,8 @@
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
     <script>
         lucide.createIcons();
+        document.querySelector('.admin-nav a.active')?.scrollIntoView({ inline: 'center', block: 'nearest' });
         document.querySelector('[data-admin-menu]')?.addEventListener('click',()=>document.querySelector('[data-admin-dropdown]')?.classList.toggle('open'));
-        document.querySelector('[data-sidebar-dropdown]')?.addEventListener('click',()=>document.querySelector('.admin-nav-dropdown')?.classList.toggle('open'));
         @if (session('status'))
             Swal.fire({icon:'success',title:'Success',text:@json(session('status')),confirmButtonColor:'#063d2b'});
         @endif
@@ -79,6 +77,7 @@
             });
         });
     </script>
+    <script src="{{ asset('js/image-preview.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

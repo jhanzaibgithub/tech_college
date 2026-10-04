@@ -10,7 +10,7 @@
             <button class="admin-button" type="submit"><i data-lucide="save"></i> Save Profile</button>
         </div>
         <div class="admin-profile-image">
-            <img src="{{ asset($admin->profile_image ?: 'data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Admin profile image" data-profile-preview>
+            <img src="{{ \App\Support\Media::url($admin->profile_image, \App\Support\Media::AVATAR_FALLBACK) }}" alt="Admin profile image" data-profile-preview>
             <label>Profile Image <input type="file" name="profile_image" accept="image/*" data-profile-image></label>
         </div>
         <div class="admin-fields">
