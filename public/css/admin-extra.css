@@ -120,3 +120,8 @@
     .admin-nav-label { display: none; }
     .admin-sidebar .admin-brand + .admin-nav { margin-right: -14px; padding-right: 14px; }
 }
+
+/* Logo crop is taller than wide (590x640): size the admin logo boxes to match so nothing is cut off */
+.admin-brand img { width: 46px; height: 50px; object-fit: contain; }
+.admin-login-card img { width: 88px; height: 96px; object-fit: contain; }
+@media (max-width: 960px) { .admin-brand img { width: 37px; height: 40px; } }

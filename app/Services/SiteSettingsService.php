@@ -108,7 +108,7 @@ class SiteSettingsService
         foreach (self::SOCIAL as $network) {
             $url = $this->socialUrl($network, $s['social_' . $network]);
             if ($url) {
-                $social[$network] = $url;
+                $social[$network] = $network === 'whatsapp' ? $this->withWhatsappGreeting($url) : $url;
             }
         }
 
@@ -166,6 +166,16 @@ class SiteSettingsService
         $path = $path ?: 'data/campus-building.png';
 
         return asset(is_file(public_path($path)) ? $path : 'data/campus-building.png');
+    }
+
+    /** wa.me chat links open with a ready-made first message. */
+    private function withWhatsappGreeting(string $url): string
+    {
+        if (! str_contains($url, 'wa.me/') || str_contains($url, '?')) {
+            return $url;
+        }
+
+        return $url . '?text=' . rawurlencode('Hello Tech College, I would like to know about admissions.');
     }
 
     private function socialUrl(string $network, ?string $value): ?string

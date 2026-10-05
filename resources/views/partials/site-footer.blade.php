@@ -1,7 +1,7 @@
 <footer id="contact">
     <div class="container footer-grid">
         <div class="footer-brand">
-            <a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a>
+            <a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/logo-crest.jpg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a>
             <p>{{ \Illuminate\Support\Str::limit($site['about']['description'], 150) }}</p>
         </div>
         <div>

@@ -365,3 +365,50 @@ footer#contact .copyright { position: relative; background: rgba(2, 28, 17, .85)
     .navigation-band .brand img { width: 42px; height: 48px; }
     .home-header nav a:not(.button) { padding-block: 13px; }
 }
+
+/* ---------- Prominent logo + college name ---------- */
+.navigation-inner { min-height: 84px; }
+.navigation-band .brand { gap: 14px; }
+.navigation-band .brand img { width: 62px; height: 68px; border: 2px solid rgba(241, 207, 129, .85); border-radius: 8px; box-shadow: 0 6px 16px rgba(0, 0, 0, .3); }
+.navigation-band .brand strong { font-size: 24px; letter-spacing: .01em; text-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
+.navigation-band .brand small { margin-top: 5px; color: #f1d48a; font-size: 10.5px; letter-spacing: .06em; }
+@media (max-width: 1100px) {
+    .navigation-band .brand img { width: 54px; height: 60px; }
+    .navigation-band .brand strong { font-size: 21px; }
+}
+@media (max-width: 960px) {
+    .navigation-inner { min-height: 72px; }
+    .navigation-band .brand img { width: 46px; height: 52px; }
+    .navigation-band .brand strong { font-size: 18px; }
+    .navigation-band .brand small { font-size: 9px; }
+}
+@media (max-width: 380px) { .navigation-band .brand strong { font-size: 16px; } .navigation-band .brand small { display: none; } }
+
+/* ---------- Floating WhatsApp button (right side) ---------- */
+.whatsapp-float { position: fixed; z-index: 60; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 10px; }
+.whatsapp-float-icon { position: relative; width: 62px; height: 62px; display: grid; place-items: center; border-radius: 50%; background: #25d366; color: #fff; box-shadow: 0 10px 26px rgba(37, 211, 102, .45), 0 4px 10px rgba(0, 0, 0, .2); transition: transform .3s var(--ease), box-shadow .3s; animation: wa-float 3.2s ease-in-out infinite; }
+.whatsapp-float-icon svg { position: relative; z-index: 1; width: 32px; height: 32px; }
+.whatsapp-float-icon::before, .whatsapp-float-icon::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #25d366; opacity: .5; animation: wa-ring 2.4s ease-out infinite; }
+.whatsapp-float-icon::after { animation-delay: 1.2s; }
+.whatsapp-float-label { padding: 9px 16px; border-radius: 99px; background: #fff; color: #0f5a30; font-size: 14px; font-weight: 800; white-space: nowrap; box-shadow: 0 8px 20px rgba(0, 0, 0, .18); opacity: 0; transform: translateX(14px); pointer-events: none; transition: opacity .25s, transform .3s var(--ease); }
+.whatsapp-float:hover .whatsapp-float-label, .whatsapp-float:focus-visible .whatsapp-float-label { opacity: 1; transform: none; }
+.whatsapp-float:hover .whatsapp-float-icon { transform: scale(1.1); box-shadow: 0 14px 32px rgba(37, 211, 102, .55), 0 4px 10px rgba(0, 0, 0, .2); }
+.whatsapp-float:focus-visible { outline: 3px solid #b78015; outline-offset: 4px; border-radius: 99px; }
+@keyframes wa-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes wa-ring { from { transform: scale(1); opacity: .5; } to { transform: scale(1.7); opacity: 0; } }
+body.modal-open .whatsapp-float { display: none; }
+@media (max-width: 640px) {
+    .whatsapp-float { right: 14px; bottom: 16px; }
+    .whatsapp-float-icon { width: 54px; height: 54px; }
+    .whatsapp-float-icon svg { width: 28px; height: 28px; }
+    .whatsapp-float-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .whatsapp-float-icon, .whatsapp-float-icon::before, .whatsapp-float-icon::after { animation: none; } .whatsapp-float-icon::before, .whatsapp-float-icon::after { display: none; } }
+
+/* ---------- WhatsApp social icon: same green + pulse as the floating button ---------- */
+.social-links a[data-network="whatsapp"] { background: #25d366; color: #fff; animation: wa-icon-pulse 2.4s ease-out infinite; }
+.social-links a[data-network="whatsapp"]:hover { background: #1ebe5b; color: #fff; animation-play-state: paused; }
+.social-links--light a[data-network="whatsapp"] { background: #25d366; color: #fff; }
+.footer-social a[data-network="whatsapp"], footer#contact .footer-social a[data-network="whatsapp"] { background: #25d366; color: #fff; border-color: transparent; }
+@keyframes wa-icon-pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, .6); } 70%, 100% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); } }
+@media (prefers-reduced-motion: reduce) { .social-links a[data-network="whatsapp"] { animation: none; } }

@@ -1,0 +1,35 @@
+/* Page loader: a light frosted overlay with the crest. Shown on every page load. */
+.page-loader { display: none; }
+.js .page-loader { display: grid; }
+.js:not(.loader-done), .js:not(.loader-done) body { overflow: hidden; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.page-loader { position: fixed; inset: 0; z-index: 9999; place-items: center; background: rgba(6, 61, 43, .68); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: opacity .5s ease, visibility 0s .5s; animation: loader-failsafe .4s 8s forwards; }
+.page-loader.is-done { opacity: 0; visibility: hidden; }
+
+.loader-stage { display: grid; justify-items: center; gap: 22px; animation: loader-in .6s cubic-bezier(.2, .7, .2, 1) both; }
+.page-loader.is-done .loader-stage { transform: translateY(-8px) scale(1.04); transition: transform .5s ease; }
+
+.loader-mark { position: relative; width: 90px; height: 98px; display: grid; place-items: center; }
+.loader-logo { width: 78px; height: 86px; overflow: hidden; border-radius: 14px; background: #fff; box-shadow: 0 8px 24px rgba(0, 0, 0, .3); animation: loader-pulse 1.8s ease-in-out infinite; }
+.loader-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+.loader-name { margin: 0; color: #fff; font: 800 20px/1 'DM Sans', Arial, sans-serif; letter-spacing: .22em; text-indent: .22em; opacity: 0; animation: loader-fade .6s .2s forwards; }
+.loader-line { position: relative; width: 120px; height: 3px; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, .18); }
+.loader-line::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 40%; border-radius: inherit; background: #e5b62f; animation: loader-sweep 1.2s ease-in-out infinite; }
+
+@keyframes loader-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes loader-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes loader-fade { to { opacity: 1; } }
+@keyframes loader-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+@keyframes loader-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+/* Hero text waits for the loader to leave, then plays its entrance */
+.js:not(.loader-done) .hero-copy > *,
+.js:not(.loader-done) .page-hero-inner > * { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+    .page-loader { transition: opacity .2s, visibility 0s .2s; }
+    .loader-stage, .loader-logo, .loader-name { animation: none; opacity: 1; }
+    .loader-line::after { animation: none; width: 100%; }
+}

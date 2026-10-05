@@ -139,3 +139,25 @@
     .card-in, .load-more > svg, .load-more-spinner { animation: none; }
     .sort-dd-menu, .sort-dd-menu li, .sort-dd-chevron, .load-more, .load-more-progress span { transition: none; }
 }
+
+/* ---------- Prominent "View all courses" call to action ---------- */
+.view-all-cta { display: flex; align-items: center; gap: 22px; margin-top: 34px; }
+.view-all-rule { flex: 1; height: 2px; background: linear-gradient(90deg, transparent, #d9c27a); }
+.view-all-rule:last-child { background: linear-gradient(270deg, transparent, #d9c27a); }
+.view-all-btn { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 18px; padding: 10px 10px 10px 30px; border-radius: 99px; background: linear-gradient(135deg, var(--green), var(--green-2)); color: #fff; box-shadow: 0 12px 28px rgba(6, 61, 43, .32); transition: transform .3s var(--ease), box-shadow .3s; }
+.view-all-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .26) 50%, transparent 70%); transform: translateX(-120%); }
+.view-all-btn:hover { transform: translateY(-3px); box-shadow: 0 18px 38px rgba(6, 61, 43, .4); }
+.view-all-btn:hover::before { transform: translateX(120%); transition: transform .8s var(--ease); }
+.view-all-btn:focus-visible { outline: 3px solid #b78015; outline-offset: 4px; }
+.view-all-text { display: grid; line-height: 1.2; text-align: left; }
+.view-all-text strong { font-size: 18px; font-weight: 800; letter-spacing: .01em; }
+.view-all-text small { margin-top: 2px; color: #f1d48a; font-size: 12.5px; font-weight: 700; }
+.view-all-arrow { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(135deg, #f0c542, #d9a21f); color: var(--deep); transition: transform .3s var(--ease); }
+.view-all-arrow svg { width: 22px; height: 22px; }
+.view-all-btn:hover .view-all-arrow { transform: translateX(4px) rotate(-8deg); }
+@media (max-width: 640px) {
+    .view-all-cta { gap: 0; margin-top: 26px; }
+    .view-all-rule { display: none; }
+    .view-all-btn { width: 100%; justify-content: space-between; padding-left: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .view-all-btn, .view-all-arrow { transition: none; } .view-all-btn:hover { transform: none; } }

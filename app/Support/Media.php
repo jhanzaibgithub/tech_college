@@ -6,7 +6,7 @@ class Media
 {
     public const FALLBACK = 'data/campus-building.png';
 
-    public const AVATAR_FALLBACK = 'data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg';
+    public const AVATAR_FALLBACK = 'data/logo-crest.jpg';
 
     /** Public URL of a stored file, or of the fallback when the path is empty or the file is missing. */
     public static function url(?string $path, string $fallback = self::FALLBACK): string

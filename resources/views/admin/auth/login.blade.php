@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | Tech College</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('data/logo-crest.jpg') }}">
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="{{ asset('css/loader.css') }}?v={{ filemtime(public_path('css/loader.css')) }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin-extra.css') }}?v={{ filemtime(public_path('css/admin-extra.css')) }}">
 </head>
 <body class="admin-login-body">
+    @include('partials.page-loader', ['subtitle' => 'Admin Panel'])
+    <script src="{{ asset('js/loader.js') }}?v={{ filemtime(public_path('js/loader.js')) }}"></script>
     <main class="admin-login-card">
-        <img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College">
+        <img src="{{ asset('data/logo-crest.jpg') }}" alt="Tech College">
         <h1>Admin Login</h1>
         <p>Sign in to manage courses and website content.</p>
         <form method="POST" action="{{ route('admin.login.store') }}">

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') | Tech College</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('data/logo-crest.jpg') }}">
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="{{ asset('css/loader.css') }}?v={{ filemtime(public_path('css/loader.css')) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -12,9 +14,11 @@
     <link rel="stylesheet" href="{{ asset('css/admin-table.css') }}?v={{ filemtime(public_path('css/admin-table.css')) }}">
 </head>
 <body class="admin-body">
+    @include('partials.page-loader', ['subtitle' => 'Admin Panel'])
+    <script src="{{ asset('js/loader.js') }}?v={{ filemtime(public_path('js/loader.js')) }}"></script>
     <aside class="admin-sidebar">
         <a class="admin-brand" href="{{ route('admin.dashboard') }}">
-            <img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College">
+            <img src="{{ asset('data/logo-crest.jpg') }}" alt="Tech College">
             <span>TECH COLLEGE<small>Admin Panel</small></span>
         </a>
         <nav class="admin-nav">

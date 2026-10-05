@@ -2,7 +2,7 @@
 <header class="site-header home-header">
     <div class="navigation-band">
         <div class="container navigation-inner">
-            <a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/WhatsApp Image 2026-08-23 at 3.36.55 PM.jpeg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a>
+            <a href="{{ route('home') }}" class="brand"><img src="{{ asset('data/logo-crest.jpg') }}" alt="Tech College crest"><span><strong>TECH COLLEGE</strong><small>OF SKILLS DEVELOPMENT<br>& PLACEMENT</small></span></a>
             <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="main-navigation" aria-expanded="false"><i data-lucide="menu"></i></button>
             <nav id="main-navigation" aria-label="Main navigation">
                 <a @class(['active' => request()->routeIs('home')]) href="{{ route('home') }}">Home</a>

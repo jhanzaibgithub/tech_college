@@ -37,7 +37,14 @@
             <div class="container">
                 @include('partials.course-slider', ['sliderCourses' => $courses, 'sliderId' => 'popular-courses', 'sliderHeading' => 'Top Courses List', 'sliderKicker' => 'OUR PROGRAMS'])
                 @if ($courses->count() > 3)
-                    <p class="view-all"><a class="text-link" href="{{ route('courses.index') }}">View all courses <i data-lucide="arrow-right"></i></a></p>
+                    <div class="view-all-cta" data-reveal>
+                        <span class="view-all-rule" aria-hidden="true"></span>
+                        <a class="view-all-btn" href="{{ route('courses.index') }}">
+                            <span class="view-all-text"><strong>View all courses</strong><small>Explore all {{ $courses->count() }} programs</small></span>
+                            <span class="view-all-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></span>
+                        </a>
+                        <span class="view-all-rule" aria-hidden="true"></span>
+                    </div>
                 @endif
             </div>
         </section>
