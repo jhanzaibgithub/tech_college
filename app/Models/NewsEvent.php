@@ -15,13 +15,11 @@ class NewsEvent extends Model
         'event_date',
         'image_path',
         'is_active',
-        'is_ticker',
         'sort_order',
     ];
 
     protected $casts = [
         'event_date' => 'date',
         'is_active'  => 'boolean',
-        'is_ticker'  => 'boolean',
     ];
 }

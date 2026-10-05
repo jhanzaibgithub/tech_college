@@ -91,7 +91,6 @@ class NewsEventController extends Controller
             'event_date' => ['nullable', 'date'],
             'image'      => ['nullable', 'image', 'max:4096'],
             'is_active'  => ['nullable'],
-            'is_ticker'  => ['nullable'],
         ]);
 
         $payload = [
@@ -99,7 +98,6 @@ class NewsEventController extends Controller
             'summary'    => $data['summary'],
             'event_date' => $data['event_date'] ?? null,
             'is_active'  => isset($data['is_active']),
-            'is_ticker'  => isset($data['is_ticker']),
             'sort_order' => $newsEvent?->sort_order ?? ((int) NewsEvent::max('sort_order') + 1),
         ];
 

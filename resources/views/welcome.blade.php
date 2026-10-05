@@ -20,7 +20,7 @@
                     @for ($copy = 0; $copy < 2; $copy++)
                         <div class="news-ticker-group" @if($copy) aria-hidden="true" @endif>
                             @forelse ($tickerItems as $item)
-                                <span class="news-ticker-item">@if($item->event_date)<b>{{ $item->event_date->format('d M Y') }}:</b>@endif {{ $item->title }} &mdash; {{ $item->summary }}</span>
+                                <span class="news-ticker-item"><b>{{ $item->item_date?->format('d M Y') }}:</b> {{ $item->title }}</span>
                             @empty
                                 <span class="news-ticker-item">Explore our skills development programs &mdash; Contact our admissions team at {{ $site['phone'] }}</span>
                                 <span class="news-ticker-item">Tech College of Skills Development &amp; Placement &mdash; Building skills, building futures</span>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\SiteSettingController;
+use App\Http\Controllers\Admin\TickerItemController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -53,6 +54,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('testimonials', StudentTestimonialController::class)->except(['show']);
         Route::post('/news-events/reorder', [NewsEventController::class, 'reorder'])->name('news-events.reorder');
         Route::resource('news-events', NewsEventController::class)->except(['show']);
+        Route::patch('/ticker/{ticker}/toggle', [TickerItemController::class, 'toggle'])->name('ticker.toggle');
+        Route::resource('ticker', TickerItemController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
         Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::patch('/enrollments/{enrollment}', [EnrollmentController::class, 'update'])->name('enrollments.update');
         Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');

@@ -26,7 +26,6 @@
                 <label>Image <input type="file" name="image" accept="image/*"></label>
                 <div style="display:grid;gap:10px;align-content:end">
                     <label class="admin-check admin-active"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $newsEvent->is_active ?? true))> Active item</label>
-                    <label class="admin-check admin-active"><input type="checkbox" name="is_ticker" value="1" @checked(old('is_ticker', $newsEvent->is_ticker ?? false))> <span style="color:#c5962e;font-weight:900;">📢 Show in news ticker</span></label>
                 </div>
             </div>
 

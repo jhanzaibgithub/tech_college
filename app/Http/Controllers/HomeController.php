@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Banner;
 use App\Models\NewsEvent;
 use App\Models\StudentTestimonial;
+use App\Models\TickerItem;
 use App\Services\CourseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,11 +43,10 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        $tickerItems = NewsEvent::query()
-            ->where('is_active', true)
-            ->where('is_ticker', true)
-            ->orderBy('sort_order')
+        $tickerItems = TickerItem::shown()
+            ->orderByDesc('item_date')
             ->orderByDesc('id')
+            ->take(20)
             ->get();
 
         return view('welcome', compact('features', 'courses', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));

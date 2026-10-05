@@ -28,6 +28,7 @@
             <a href="{{ route('admin.enrollments.index') }}" @class(['active' => request()->routeIs('admin.enrollments.*')])><i data-lucide="user-plus"></i> Enrollments @if(($newEnrollments = \App\Models\Enrollment::where('status', 'new')->count()) > 0)<span class="admin-badge" title="New requests">{{ $newEnrollments }}</span>@endif</a>
             <a href="{{ route('admin.testimonials.index') }}" @class(['active' => request()->routeIs('admin.testimonials.*')])><i data-lucide="message-square-quote"></i> Testimonials</a>
             <a href="{{ route('admin.news-events.index') }}" @class(['active' => request()->routeIs('admin.news-events.*')])><i data-lucide="newspaper"></i> News & Events</a>
+            <a href="{{ route('admin.ticker.index') }}" @class(['active' => request()->routeIs('admin.ticker.*')])><i data-lucide="megaphone"></i> News Bar</a>
             <p class="admin-nav-label">Site content</p>
             <a href="{{ route('admin.settings.edit', 'hero') }}" @class(['active' => request()->is('admin/settings/hero')])><i data-lucide="sparkles"></i> Homepage Hero</a>
             <a href="{{ route('admin.settings.edit', 'pages') }}" @class(['active' => request()->is('admin/settings/pages')])><i data-lucide="image"></i> Page Heroes</a>

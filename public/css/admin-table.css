@@ -53,3 +53,42 @@ a.contact-line:hover { color: var(--green); text-decoration: underline; text-und
 .enrollment-table .admin-actions button { transition: background .2s, color .2s, transform .2s; }
 .enrollment-table .admin-actions button:hover { background: var(--green); color: #fff; transform: translateY(-2px); }
 @media (prefers-reduced-motion: reduce) { .enrollment-table tbody tr, .enrollment-table .admin-actions button, .status-pill { transition: none; } }
+
+/* ---------- News bar admin ---------- */
+.ticker-add { display: grid; grid-template-columns: minmax(0, 1fr) 190px auto; gap: 14px; align-items: end; padding: 16px; margin-bottom: 18px; border: 1px solid #e1e9e4; border-radius: 12px; background: #f7faf8; }
+.ticker-add label { display: grid; gap: 6px; color: #19261f; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+.ticker-add input { width: 100%; min-height: 44px; text-transform: none; letter-spacing: 0; }
+.ticker-table { width: 100%; min-width: 560px; }
+.ticker-table .ticker-title { font-weight: 700; overflow-wrap: anywhere; }
+.ticker-table .col-tdate { width: 140px; white-space: nowrap; }
+.ticker-table .col-tactions { width: 110px; }
+@media (max-width: 760px) { .ticker-add { grid-template-columns: minmax(0, 1fr); } .ticker-add .admin-button { justify-self: start; } }
+
+/* News bar: show/hide switch, summary pills, hidden rows */
+.ticker-add { grid-template-columns: minmax(0, 1fr) 190px auto; }
+.ticker-add-check { grid-column: 1 / -1; display: flex !important; align-items: center; gap: 10px; text-transform: none !important; letter-spacing: 0 !important; font-size: 14px !important; }
+.ticker-add-check input { width: 18px; min-height: 0 !important; accent-color: var(--green); }
+.ticker-summary { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.ticker-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #eef2f0; color: #4a5b52; font-size: 13px; font-weight: 800; }
+.ticker-pill i { width: 9px; height: 9px; border-radius: 50%; background: #9aa7a0; }
+.ticker-pill.is-on { background: #dff3e6; color: #0f5a30; }
+.ticker-pill.is-on i { background: #1f9d55; box-shadow: 0 0 0 4px rgba(31, 157, 85, .2); }
+.ticker-table .col-tswitch { width: 130px; }
+.ticker-table tr.is-hidden-item .ticker-title, .ticker-table tr.is-hidden-item .col-tdate { color: #8b978f; }
+.ticker-table tr.is-hidden-item .ticker-title { text-decoration: line-through; text-decoration-color: #c5cec8; }
+.switch { position: relative; width: 48px; height: 28px; padding: 0; border: 0; border-radius: 99px; background: #c8d3cc; cursor: pointer; transition: background .25s; }
+.switch span { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .25); transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+.switch[aria-checked="true"] { background: #1f9d55; }
+.switch[aria-checked="true"] span { transform: translateX(20px); }
+.switch:focus-visible { outline: 3px solid #b78015; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .switch, .switch span { transition: none; } }
+
+/* News bar table: fixed columns, one-line headers, titles stay on a single line with "..." and show in full on hover */
+.ticker-table { table-layout: fixed; min-width: 760px; }
+.ticker-table th { white-space: nowrap; }
+.ticker-table .col-tswitch { width: 170px; }
+.ticker-table .col-tdate { width: 130px; }
+.ticker-table .col-tactions { width: 110px; }
+.ticker-table td.ticker-title { overflow: hidden; }
+.ticker-title-text { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: default; }
+.ticker-table td, .ticker-table th { vertical-align: middle; }
