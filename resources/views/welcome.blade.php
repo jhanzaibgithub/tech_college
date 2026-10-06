@@ -20,7 +20,7 @@
                     @for ($copy = 0; $copy < 2; $copy++)
                         <div class="news-ticker-group" @if($copy) aria-hidden="true" @endif>
                             @forelse ($tickerItems as $item)
-                                <span class="news-ticker-item"><b>{{ $item->item_date?->format('d M Y') }}:</b> {{ $item->title }}</span>
+                                <span class="news-ticker-item">{{ $item->title }}</span>
                             @empty
                                 <span class="news-ticker-item">Explore our skills development programs &mdash; Contact our admissions team at {{ $site['phone'] }}</span>
                                 <span class="news-ticker-item">Tech College of Skills Development &amp; Placement &mdash; Building skills, building futures</span>
@@ -35,12 +35,24 @@
 
         <section class="section courses-section" id="courses" aria-labelledby="popular-courses-title">
             <div class="container">
-                @include('partials.course-slider', ['sliderCourses' => $courses, 'sliderId' => 'popular-courses', 'sliderHeading' => 'Top Courses List', 'sliderKicker' => 'OUR PROGRAMS'])
-                @if ($courses->count() > 3)
+                <div class="home-courses-head" data-reveal>
+                    <div class="course-list-heading">
+                        <p class="section-kicker">OUR PROGRAMS</p>
+                        <h2 id="popular-courses-title">Top Courses List</h2>
+                    </div>
+                </div>
+                @if ($courses->isEmpty())
+                    <p class="empty-panel-text">New courses are on the way. Contact our team for upcoming programs.</p>
+                @else
+                    <div class="course-grid-list" data-reveal data-stagger>
+                        @foreach ($courses as $item)
+                            @include('partials.course-card', ['item' => $item])
+                        @endforeach
+                    </div>
                     <div class="view-all-cta" data-reveal>
                         <span class="view-all-rule" aria-hidden="true"></span>
                         <a class="view-all-btn" href="{{ route('courses.index') }}">
-                            <span class="view-all-text"><strong>View all courses</strong><small>Explore all {{ $courses->count() }} programs</small></span>
+                            <span class="view-all-text"><strong>View all courses</strong><small>Explore all {{ $courseTotal }} {{ \Illuminate\Support\Str::plural('program', $courseTotal) }}</small></span>
                             <span class="view-all-arrow" aria-hidden="true"><i data-lucide="arrow-right"></i></span>
                         </a>
                         <span class="view-all-rule" aria-hidden="true"></span>
@@ -131,7 +143,6 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/course-slider.js') }}?v={{ filemtime(public_path('js/course-slider.js')) }}"></script>
     <script src="{{ asset('js/home.js') }}?v={{ filemtime(public_path('js/home.js')) }}"></script>
     <script src="{{ asset('js/hero-banners.js') }}?v={{ filemtime(public_path('js/hero-banners.js')) }}"></script>
 @endpush

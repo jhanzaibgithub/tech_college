@@ -141,14 +141,6 @@
         });
     });
 
-    root.querySelectorAll('img[data-fallback]:not([data-fb])').forEach(img => {
-        img.dataset.fb = '1';
-        const fallback = () => {
-            if (img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
-        };
-        img.addEventListener('error', fallback, { once: true });
-        if (img.complete && !img.naturalWidth) fallback();
-    });
     };
     initCards();
     window.TechCollege = Object.assign(window.TechCollege || {}, { initCards });

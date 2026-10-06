@@ -30,3 +30,12 @@ only `public/build` will not run routes, Blade, the database, or the admin area.
 The upload ZIP produced for this project contains the built `public/build`
 assets and the existing Composer dependencies, but deliberately excludes
 `.env`, Git data, Node dependencies, logs, caches, and tests.
+
+## Pictures missing or flickering on the live site
+
+- Set `APP_URL=https://techcollege.com.pk` in the live `.env`. The site then always builds https:// links, so
+  browsers do not block images as "mixed content" when the host terminates SSL in front of PHP.
+- After changing `.env` or uploading new code, use **Admin -> Maintenance -> Clear all caches** (no SSH needed).
+- If files in `storage/app/public` are not reachable, use **Admin -> Maintenance -> Connect storage link**.
+- If a picture still fails, open the browser's Network tab, click the failing image and note its status
+  (404 = file missing, 403 = permissions, 5xx/508 = hosting resource limit). Images are retried once automatically.

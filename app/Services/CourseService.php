@@ -40,6 +40,25 @@ class CourseService
         return $query->paginate($perPage)->withQueryString();
     }
 
+    /** The courses shown on the homepage: highest star rating first, unrated last, admin drag order breaks ties. */
+    public function homeCourses(int $limit = 9): Collection
+    {
+        return Course::query()
+            ->with('images')
+            ->where('is_active', true)
+            ->orderByRaw('rating is null')
+            ->orderByDesc('rating')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->take($limit)
+            ->get();
+    }
+
+    public function publicCourseCount(): int
+    {
+        return Course::where('is_active', true)->count();
+    }
+
     public function adminCourses(): Collection
     {
         return Course::query()

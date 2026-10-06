@@ -24,7 +24,7 @@
                 <label class="admin-check admin-active"><input type="hidden" name="is_active" value="0"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $banner->is_active))> Show on homepage</label>
             </div>
             <div class="admin-current-image" style="width:100%;max-width:760px" data-banner-preview @if(!$banner->exists) hidden @endif>
-                <img @if($banner->exists) src="{{ $banner->imageUrl() }}" @endif alt="Banner preview" style="height:auto;max-height:320px;object-fit:contain">
+                <img @if($banner->exists) src="{{ $banner->imageUrl() }}" data-fallback="{{ asset('data/campus-building.png') }}" @endif alt="Banner preview" style="height:auto;max-height:320px;object-fit:contain">
                 <span>Banner preview</span>
             </div>
         </section>

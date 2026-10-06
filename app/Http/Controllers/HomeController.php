@@ -27,7 +27,8 @@ class HomeController extends Controller
             ['icon' => 'users-round', 'title' => 'Expert Instructors', 'text' => 'Industry professionals'],
         ];
 
-        $courses = $this->courses->publicCourses();
+        $courses = $this->courses->homeCourses(9);
+        $courseTotal = $this->courses->publicCourseCount();
         $banners = Banner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
 
         $testimonials = StudentTestimonial::query()
@@ -44,12 +45,12 @@ class HomeController extends Controller
             ->get();
 
         $tickerItems = TickerItem::shown()
-            ->orderByDesc('item_date')
+            ->orderByRaw('COALESCE(item_date, DATE(created_at)) DESC')
             ->orderByDesc('id')
             ->take(20)
             ->get();
 
-        return view('welcome', compact('features', 'courses', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));
+        return view('welcome', compact('features', 'courses', 'courseTotal', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));
     }
 
     public function courses(Request $request): View|JsonResponse

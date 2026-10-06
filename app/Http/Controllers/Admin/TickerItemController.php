@@ -13,7 +13,7 @@ class TickerItemController extends Controller
     public function index(): View
     {
         return view('admin.ticker.index', [
-            'items' => TickerItem::orderByDesc('is_active')->orderByDesc('item_date')->orderByDesc('id')->paginate(15),
+            'items' => TickerItem::orderByDesc('is_active')->orderByRaw('COALESCE(item_date, DATE(created_at)) DESC')->orderByDesc('id')->paginate(15),
             'shownCount' => TickerItem::shown()->count(),
             'hiddenCount' => TickerItem::where('is_active', false)->count(),
         ]);
@@ -57,7 +57,7 @@ class TickerItemController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:200'],
-            'item_date' => ['required', 'date'],
+            'item_date' => ['nullable', 'date'],
         ]);
 
         // An unticked box is simply absent from the request.

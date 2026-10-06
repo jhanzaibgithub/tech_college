@@ -142,3 +142,30 @@
 .slug-status.is-taken::before, .slug-status.is-invalid::before { content: '\2715'; }
 .admin-fields { align-items: start; }
 .admin-fields > label { align-content: start; }
+
+/* ---------- Maintenance tools ---------- */
+.maint-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 8px; }
+.maint-card { display: grid; align-content: start; gap: 10px; padding: 22px; border: 1px solid #e1e9e4; border-radius: 14px; background: linear-gradient(160deg, #fff, #f7faf8); }
+.maint-card h3 { margin: 4px 0 0; font-size: 19px; }
+.maint-card p { margin: 0; font-size: 14px; line-height: 1.6; }
+.maint-card form { margin-top: 6px; }
+.maint-card code { padding: 1px 6px; border-radius: 6px; background: #e9f1ec; color: var(--green); font-size: 12.5px; }
+.maint-icon { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; background: var(--green); color: #f1cf81; }
+.maint-icon svg { width: 22px; height: 22px; }
+.maint-state { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; background: #eef2f0; color: #4a5b52 !important; font-weight: 800 !important; }
+.maint-state i { display: none; }
+.maint-state small { color: inherit; font-size: 12.5px; font-weight: 600; }
+.maint-state.is-connected { background: #dff3e6; color: #0f5a30 !important; }
+.maint-state.is-missing { background: #fff4d6; color: #6b4b00 !important; }
+.maint-state.is-broken, .maint-state.is-blocked { background: #fdeceb; color: #b42318 !important; }
+.maint-log { margin: 0 0 18px; padding: 14px 16px; border: 1px solid #dfe8e2; border-radius: 12px; background: #f7faf8; }
+.maint-log strong { color: var(--green); }
+.maint-log ul { display: grid; gap: 4px; padding: 0; margin: 8px 0 0; list-style: none; font-family: Consolas, 'Courier New', monospace; font-size: 13px; }
+.maint-log li.is-ok { color: #0f7a40; }
+.maint-log li.is-ok::before { content: '\2713  '; }
+.maint-log li.is-fail { color: #b42318; }
+.maint-log li.is-fail::before { content: '\2715  '; }
+.admin-button:disabled { opacity: .55; cursor: not-allowed; }
+.ticker-add-note { grid-column: 1 / -1; margin: 0 !important; }
+.ticker-add label small { color: #7a877f; font-weight: 700; text-transform: none; letter-spacing: 0; }
+@media (max-width: 900px) { .maint-grid { grid-template-columns: minmax(0, 1fr); } }

@@ -5,6 +5,7 @@ use App\Http\Controllers\EnrollmentController as PublicEnrollmentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\MaintenanceController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TickerItemController;
 use App\Http\Controllers\Admin\BannerController;
@@ -65,6 +66,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
         Route::get('/settings/{section}', [SiteSettingController::class, 'edit'])->name('settings.edit');
         Route::put('/settings/{section}', [SiteSettingController::class, 'update'])->name('settings.update');
+        Route::get('/maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
+        Route::middleware('throttle:10,1')->group(function () {
+            Route::post('/maintenance/clear-cache', [MaintenanceController::class, 'clearCache'])->name('maintenance.clear-cache');
+            Route::post('/maintenance/storage-link', [MaintenanceController::class, 'storageLink'])->name('maintenance.storage-link');
+        });
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });

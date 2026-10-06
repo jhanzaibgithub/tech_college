@@ -6,6 +6,7 @@
     <title>@yield('title', 'Admin') | Tech College</title>
     <link rel="icon" type="image/jpeg" href="{{ asset('data/logo-crest.jpg') }}">
     <script>document.documentElement.classList.add("js")</script>
+    <script src="{{ asset('js/img-retry.js') }}?v={{ filemtime(public_path('js/img-retry.js')) }}"></script>
     <link rel="stylesheet" href="{{ asset('css/loader.css') }}?v={{ filemtime(public_path('css/loader.css')) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -36,6 +37,7 @@
             <a href="{{ route('admin.settings.edit', 'about') }}" @class(['active' => request()->is('admin/settings/about')])><i data-lucide="info"></i> About Us</a>
             <a href="{{ route('admin.settings.edit', 'contact') }}" @class(['active' => request()->is('admin/settings/contact')])><i data-lucide="phone"></i> Contact & Social</a>
             <a href="{{ route('admin.messages.index') }}" @class(['active' => request()->routeIs('admin.messages.*')])><i data-lucide="mail"></i> Messages @if(($unreadMessages = \App\Models\ContactMessage::where('is_read', false)->count()) > 0)<span class="admin-badge">{{ $unreadMessages }}</span>@endif</a>
+            <a href="{{ route('admin.maintenance.index') }}" @class(['active' => request()->routeIs('admin.maintenance.*')])><i data-lucide="wrench"></i> Maintenance</a>
         </nav>
     </aside>
     <div class="admin-shell">

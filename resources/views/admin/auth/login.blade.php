@@ -6,6 +6,7 @@
     <title>Admin Login | Tech College</title>
     <link rel="icon" type="image/jpeg" href="{{ asset('data/logo-crest.jpg') }}">
     <script>document.documentElement.classList.add("js")</script>
+    <script src="{{ asset('js/img-retry.js') }}?v={{ filemtime(public_path('js/img-retry.js')) }}"></script>
     <link rel="stylesheet" href="{{ asset('css/loader.css') }}?v={{ filemtime(public_path('css/loader.css')) }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">

@@ -12,7 +12,9 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    // Hosting panels and CDNs (cPanel, Cloudflare, LiteSpeed) usually terminate https in front of PHP.
+    // Trusting them lets Laravel see the real scheme, so every image/CSS/JS link is built as https://.
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

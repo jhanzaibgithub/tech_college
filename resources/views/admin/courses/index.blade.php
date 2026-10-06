@@ -37,11 +37,6 @@
 
 @push('scripts')
 <script>
-    document.querySelectorAll('img[data-fallback]').forEach((img) => {
-        const fallback = () => { if (img.src !== img.dataset.fallback) img.src = img.dataset.fallback; };
-        img.addEventListener('error', fallback, { once: true });
-        if (img.complete && !img.naturalWidth) fallback();
-    });
 
     const tbody = document.querySelector('[data-sortable-courses]');
     let draggedRow = null;

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\SiteSettingsService;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // On the live site (APP_URL=https://...) never build http:// asset links: browsers block those images as mixed content.
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
+
         View::composer('layouts.public', function ($view) {
             $view->with('footerCourses', \App\Models\Course::query()
                 ->where('is_active', true)

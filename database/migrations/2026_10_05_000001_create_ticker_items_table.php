@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('ticker_items', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->date('item_date');
+            $table->date('item_date')->nullable();
             $table->timestamps();
         });
 

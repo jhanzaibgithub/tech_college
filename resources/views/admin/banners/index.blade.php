@@ -15,7 +15,7 @@
                     @forelse ($banners as $banner)
                         <tr>
                             <td>{{ $banner->sort_order }}</td>
-                            <td><img class="admin-thumb" src="{{ $banner->imageUrl() }}" alt="{{ $banner->title }}"></td>
+                            <td><img class="admin-thumb" src="{{ $banner->imageUrl() }}" data-fallback="{{ asset('data/campus-building.png') }}" alt="{{ $banner->title }}"></td>
                             <td>{{ $banner->title }}</td>
                             <td>{{ $banner->is_active ? 'Active' : 'Hidden' }}</td>
                             <td class="admin-actions">

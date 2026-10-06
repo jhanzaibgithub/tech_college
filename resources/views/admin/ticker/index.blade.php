@@ -11,8 +11,9 @@
         <form class="ticker-add" method="POST" action="{{ route('admin.ticker.store') }}">
             @csrf
             <label>Title <input type="text" name="title" value="{{ old('title') }}" maxlength="200" placeholder="e.g. Admissions open for the new batch" required></label>
-            <label>Date <input type="date" name="item_date" value="{{ old('item_date', now()->toDateString()) }}" required></label>
+            <label>Date <small>(optional)</small> <input type="date" name="item_date" value="{{ old('item_date') }}"></label>
             <button class="admin-button" type="submit"><i data-lucide="plus"></i> Add</button>
+            <p class="field-hint ticker-add-note">The bar shows only the title. The date is optional and is just for your own records, so it is never shown on the website.</p>
             <label class="admin-check ticker-add-check"><input type="checkbox" name="is_active" value="1" @checked(old('title') === null || old('is_active'))> Show in the news bar</label>
         </form>
 
