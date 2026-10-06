@@ -48,6 +48,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::resource('banners', BannerController::class)->except(['show']);
+        Route::get('/courses/slug-check', [CourseController::class, 'slugCheck'])->middleware('throttle:60,1')->name('courses.slug-check');
         Route::post('/courses/reorder', [CourseController::class, 'reorder'])->name('courses.reorder');
         Route::resource('courses', CourseController::class)->except(['show']);
         Route::post('/testimonials/reorder', [StudentTestimonialController::class, 'reorder'])->name('testimonials.reorder');

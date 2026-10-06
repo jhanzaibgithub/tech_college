@@ -125,3 +125,20 @@
 .admin-brand img { width: 46px; height: 50px; object-fit: contain; }
 .admin-login-card img { width: 88px; height: 96px; object-fit: contain; }
 @media (max-width: 960px) { .admin-brand img { width: 37px; height: 40px; } }
+
+/* ---------- Course slug: read-only, generated from the title ---------- */
+.slug-field { position: relative; display: block; }
+.slug-field > svg { position: absolute; top: 50%; left: 12px; width: 16px; height: 16px; transform: translateY(-50%); color: #7a897f; pointer-events: none; }
+.admin-card .slug-field input[readonly] { padding-left: 36px; background: #eff4f1; color: #3d4d44; cursor: not-allowed; border-style: dashed; }
+.admin-card .slug-field input[readonly]:focus { box-shadow: none; border-color: #ccd8d0; }
+.slug-field.is-good input[readonly] { border-color: #1f9d55; background: #f1faf4; }
+.slug-field.is-bad input[readonly] { border-color: #d92d20; background: #fff5f4; }
+.slug-status { display: block; margin-top: 6px; color: #66736c; font-size: 13px; font-weight: 700; line-height: 1.4; }
+.slug-status.is-checking { color: #7a897f; }
+.slug-status.is-ok { color: #0f7a40; }
+.slug-status.is-taken, .slug-status.is-invalid { color: #b42318; }
+.slug-status.is-ok::before, .slug-status.is-taken::before, .slug-status.is-invalid::before { margin-right: 6px; font-weight: 900; }
+.slug-status.is-ok::before { content: '\2713'; }
+.slug-status.is-taken::before, .slug-status.is-invalid::before { content: '\2715'; }
+.admin-fields { align-items: start; }
+.admin-fields > label { align-content: start; }

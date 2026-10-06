@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Services\CourseService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CourseController extends Controller
 {
+    private const SLUG_TAKEN = 'This slug already exists. Please change the title to change the slug.';
+
     public function __construct(private readonly CourseService $courses)
     {
     }
@@ -72,6 +76,37 @@ class CourseController extends Controller
         return redirect()->route('admin.courses.index')->with('status', 'Course deleted successfully.');
     }
 
+    /** Turns a course title into its slug and says whether that slug is already taken. */
+    public function slugCheck(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'ignore' => ['nullable', 'integer'],
+        ]);
+
+        $slug = Str::slug($data['title']);
+
+        if ($slug === '') {
+            return response()->json([
+                'slug' => '',
+                'valid' => false,
+                'exists' => false,
+                'message' => 'Use English letters or numbers in the title so a slug can be created.',
+            ]);
+        }
+
+        $exists = Course::where('slug', $slug)
+            ->when($data['ignore'] ?? null, fn ($query, $id) => $query->whereKeyNot($id))
+            ->exists();
+
+        return response()->json([
+            'slug' => $slug,
+            'valid' => true,
+            'exists' => $exists,
+            'message' => $exists ? self::SLUG_TAKEN : 'This slug is available.',
+        ]);
+    }
+
     public function reorder(Request $request): Response
     {
         $data = $request->validate([
@@ -88,9 +123,8 @@ class CourseController extends Controller
 
     private function validated(Request $request, ?Course $course = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('courses', 'slug')->ignore($course?->id)],
             'icon' => ['required', 'string', 'max:80'],
             'rating' => ['nullable', 'integer', 'between:1,5'],
             'short_description' => ['required', 'string', 'max:500'],
@@ -100,6 +134,24 @@ class CourseController extends Controller
             'delete_images' => ['nullable', 'array'],
             'delete_images.*' => ['integer', 'exists:course_images,id'],
         ]);
+
+        // The slug is generated from the title and cannot be typed. Existing courses keep their address.
+        if ($course) {
+            $data['slug'] = $course->slug;
+
+            return $data;
+        }
+
+        $data['slug'] = Str::slug($data['title']);
+
+        validator(['slug' => $data['slug']], [
+            'slug' => ['required', Rule::unique('courses', 'slug')],
+        ], [
+            'slug.required' => 'Use English letters or numbers in the title so a slug can be created.',
+            'slug.unique' => self::SLUG_TAKEN,
+        ])->validate();
+
+        return $data;
     }
 
     private function icons(): array

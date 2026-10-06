@@ -16,7 +16,13 @@
 
             <div class="admin-fields">
                 <label>Course Title <input type="text" name="title" value="{{ old('title', $course->title) }}" required></label>
-                <label>Slug <input type="text" name="slug" value="{{ old('slug', $course->slug) }}" placeholder="auto-generated if empty"></label>
+                <label>Slug (web address)
+                    <span class="slug-field" data-slug-field>
+                        <i data-lucide="lock"></i>
+                        <input type="text" name="slug" value="{{ old('slug', $course->slug) }}" placeholder="Created automatically from the title" readonly tabindex="-1" aria-describedby="slug-status" data-slug-input>
+                    </span>
+                    <small id="slug-status" class="slug-status" data-slug-status role="status" aria-live="polite">{{ $course->exists ? 'The address stays the same when you edit a course: /courses/' . $course->slug : 'Created automatically when you finish typing the title.' }}</small>
+                </label>
                 <label class="admin-check admin-active"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $course->is_active ?? true))> Active course</label>
             </div>
 
@@ -82,6 +88,61 @@
 
 @push('scripts')
 <script>
+    // Slug: generated from the title by the server, never typed. New courses check that the address is free.
+    (() => {
+        const input = document.querySelector('[data-slug-input]');
+        if (!input) return;
+        const isCreate = @json(! $course->exists);
+        if (!isCreate) return; // existing courses keep their address
+        const form = input.form;
+        const title = form.querySelector('input[name="title"]');
+        const status = document.querySelector('[data-slug-status]');
+        const field = input.closest('[data-slug-field]');
+        const url = @json(route('admin.courses.slug-check'));
+        let state = 'idle';   // idle | checking | ok | taken | invalid
+        let timer;
+        let latest = 0;
+
+        const show = (next, message) => {
+            state = next;
+            status.textContent = message;
+            status.className = 'slug-status' + (next === 'idle' ? '' : ' is-' + next);
+            field.className = 'slug-field' + (next === 'taken' || next === 'invalid' ? ' is-bad' : next === 'ok' ? ' is-good' : '');
+        };
+
+        const check = async () => {
+            const value = title.value.trim();
+            if (!value) { input.value = ''; return show('idle', 'Created automatically when you finish typing the title.'); }
+            const ticket = ++latest;
+            show('checking', 'Creating slug...');
+            try {
+                const response = await fetch(url + '?title=' + encodeURIComponent(value), { headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' });
+                if (!response.ok) throw new Error('bad response');
+                const data = await response.json();
+                if (ticket !== latest) return; // a newer title is being checked
+                input.value = data.slug;
+                if (!data.valid) show('invalid', data.message);
+                else if (data.exists) show('taken', data.message);
+                else show('ok', '/courses/' + data.slug + ' is available.');
+            } catch {
+                if (ticket !== latest) return;
+                show('invalid', 'Could not check the slug. Please check your connection and try again.');
+            }
+        };
+
+        title.addEventListener('input', () => { show('checking', 'Creating slug...'); clearTimeout(timer); timer = setTimeout(check, 450); });
+        title.addEventListener('blur', () => { clearTimeout(timer); check(); });
+        form.addEventListener('submit', (event) => {
+            if (state === 'ok') return;
+            event.preventDefault();
+            clearTimeout(timer);
+            if (state === 'idle' || state === 'checking') { check(); }
+            title.focus();
+            title.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        });
+        if (title.value.trim()) check(); // after a failed save the title is already filled in
+    })();
+
     document.querySelectorAll('[data-star-selector]').forEach((group) => {
         const options = Array.from(group.querySelectorAll('.star-option'));
         const paint = () => {
