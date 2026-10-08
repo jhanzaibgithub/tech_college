@@ -44,7 +44,24 @@
         </div>
         @if ($site['map_url'])
             <div class="container contact-map" data-reveal>
-                <iframe src="{{ $site['map_url'] }}" title="Tech College location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+                <div class="map-heading">
+                    <p class="section-kicker">FIND US</p>
+                    <h2>Our location</h2>
+                </div>
+                <div class="map-frame">
+                    <iframe src="{{ $site['map_url'] }}" title="Tech College location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+                    <div class="map-card">
+                        <span class="map-pin" aria-hidden="true"><i data-lucide="map-pin"></i></span>
+                        <div>
+                            <strong>Tech College of Skills Development &amp; Placement</strong>
+                            <p>{!! nl2br(e($site['address'])) !!}</p>
+                            <div class="map-actions">
+                                <a class="map-btn is-primary" href="{{ $site['map_directions'] }}" target="_blank" rel="noopener noreferrer"><i data-lucide="navigation"></i> Get directions</a>
+                                <a class="map-btn" href="{{ $site['map_link'] }}" target="_blank" rel="noopener noreferrer"><i data-lucide="external-link"></i> Open in Google Maps</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     </section>

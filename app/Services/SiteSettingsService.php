@@ -39,6 +39,17 @@ class SiteSettingsService
         'about_institution' => '',
         'about_image' => 'data/campus-building.png',
         'about_quote' => 'Skills create opportunities.',
+        // Feature cards under the homepage hero
+        'feature_1_title' => 'Career Counseling',
+        'feature_1_text' => 'Guidance for your goals',
+        'feature_2_title' => 'Recommendations',
+        'feature_2_text' => 'The right course for you',
+        'feature_3_title' => 'Course Completion',
+        'feature_3_text' => 'Finish and get certified',
+        'feature_4_title' => 'Profile Assessment',
+        'feature_4_text' => 'Know your strengths',
+        'feature_5_title' => 'Job Placement',
+        'feature_5_text' => 'Support to get hired',
         // Inner page heroes
         'page_about_title' => 'About Tech College',
         'page_about_text' => 'Skills, training and placement support for a better future.',
@@ -54,6 +65,9 @@ class SiteSettingsService
         'hero_title' => 'Build job-ready skills for a career that lasts',
         'hero_text' => 'Practical technical and professional training, recognised certification and placement support for students across Pakistan.',
     ];
+
+    /** Icon for each of the five feature card positions. */
+    public const FEATURE_ICONS = ['messages-square', 'lightbulb', 'graduation-cap', 'clipboard-check', 'briefcase-business'];
 
     public const SOCIAL = ['whatsapp', 'facebook', 'youtube', 'tiktok', 'instagram'];
 
@@ -120,7 +134,13 @@ class SiteSettingsService
             'phone_href' => 'tel:' . preg_replace('/[^\d+]/', '', $s['contact_phone']),
             'address' => $s['contact_address'],
             'hours' => $s['contact_hours'],
-            'map_url' => $s['contact_map_url'],
+            'map_url' => self::mapEmbedUrl($s['contact_map_url'], $s['contact_address']),
+            'map_title' => self::mapQuery($s['contact_map_url'], $s['contact_address']),
+            // The visitor's own Google Maps link when there is one, otherwise a search for the address.
+            'map_link' => (self::isGoogleMapsLink($s['contact_map_url']) && ! self::validMapEmbed($s['contact_map_url']))
+                ? trim($s['contact_map_url'])
+                : 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(preg_replace('/\s+/', ' ', (string) $s['contact_address'])),
+            'map_directions' => 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode(self::directionsTarget($s['contact_map_url'], $s['contact_address'])),
             'social' => $social,
             'stats' => [
                 ['value' => (int) $s['stat_students'], 'label' => 'Students Enrolled', 'icon' => 'users'],
@@ -144,12 +164,151 @@ class SiteSettingsService
                 'text' => $s['page_' . $page . '_text'],
                 'image' => $this->existingAsset($s['page_' . $page . '_image']),
             ]])->all(),
+            'features' => collect(range(1, 5))
+                ->map(fn ($i) => [
+                    'icon' => self::FEATURE_ICONS[$i - 1],
+                    'title' => trim((string) $s['feature_' . $i . '_title']),
+                    'text' => trim((string) $s['feature_' . $i . '_text']),
+                ])
+                ->filter(fn ($feature) => $feature['title'] !== '')
+                ->values()
+                ->all(),
             'hero' => [
                 'kicker' => $s['hero_kicker'],
                 'title' => $s['hero_title'],
                 'text' => $s['hero_text'],
             ],
         ];
+    }
+
+    /**
+     * Google only allows its "embed" addresses inside a page. A normal maps link (share link, place page,
+     * maps.app.goo.gl) is refused and shows a grey box with a sad-face icon, so those are never rendered.
+     */
+    public static function validMapEmbed(?string $url): bool
+    {
+        $url = trim((string) $url);
+
+        return $url !== '' && (bool) preg_match('#^https://(www\.google\.com/maps/embed(\?|/)|(www\.google\.com|maps\.google\.com)/maps\?[^\s]*output=embed)#i', $url);
+    }
+
+    /** Any Google Maps address: embed links, normal place/share links and the short maps.app.goo.gl links. */
+    public static function isGoogleMapsLink(?string $url): bool
+    {
+        return (bool) preg_match('#^https://(www\.google\.com/maps|google\.com/maps|maps\.google\.com|maps\.app\.goo\.gl/|goo\.gl/maps)#i', trim((string) $url));
+    }
+
+    /**
+     * Google's unique number for a business ("cid"), taken from the 0x...:0x... part of a place link.
+     * Embedding by this number pins the exact place, unlike a name search which can land somewhere else.
+     */
+    public static function mapCid(?string $saved): ?string
+    {
+        if (! preg_match('/0x[0-9a-f]+:0x([0-9a-f]+)/i', (string) $saved, $m)) {
+            return null;
+        }
+
+        $decimal = self::hexToDecimal($m[1]);
+
+        return $decimal !== '0' ? $decimal : null;
+    }
+
+    /** Hex to decimal for numbers larger than PHP's integer range, without needing the bcmath/gmp extensions. */
+    private static function hexToDecimal(string $hex): string
+    {
+        $digits = [0];
+
+        foreach (str_split(strtolower($hex)) as $char) {
+            $carry = hexdec($char);
+
+            foreach ($digits as $i => $digit) {
+                $value = $digit * 16 + $carry;
+                $digits[$i] = $value % 10;
+                $carry = intdiv($value, 10);
+            }
+
+            while ($carry > 0) {
+                $digits[] = $carry % 10;
+                $carry = intdiv($carry, 10);
+            }
+        }
+
+        return ltrim(implode('', array_reverse($digits)), '0') ?: '0';
+    }
+
+    /**
+     * What the saved Google Maps link points at, as a search text for Google: coordinates when the link has them,
+     * otherwise the place name or search text inside it, otherwise the college address (short share links).
+     */
+    public static function mapQuery(?string $saved, ?string $address = null): string
+    {
+        $saved = trim((string) $saved);
+
+        if ($saved !== '' && self::isGoogleMapsLink($saved) && ! self::validMapEmbed($saved)) {
+            if (preg_match('/@(-?\d+\.\d+),(-?\d+\.\d+)/', $saved, $m) || preg_match('/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/', $saved, $m)) {
+                return $m[1] . ',' . $m[2];
+            }
+
+            if (preg_match('/[?&](?:q|query)=([^&#]+)/', $saved, $m)) {
+                return trim(urldecode($m[1]));
+            }
+
+            if (preg_match('#/maps/(?:place|search)/([^/@?]+)#', $saved, $m)) {
+                return trim(urldecode(str_replace('+', ' ', $m[1])));
+            }
+        }
+
+        return trim((string) preg_replace('/\s+/', ' ', (string) $address));
+    }
+
+    /**
+     * Turns whatever Google Maps link the admin saved into an address that is allowed inside a page.
+     * Embed links are used as they are; normal links are converted with mapQuery(). Returns '' when
+     * there is nothing usable (no map is shown).
+     */
+    public static function mapEmbedUrl(?string $saved, ?string $address = null): string
+    {
+        $saved = trim((string) $saved);
+
+        if ($saved === '' || ! self::isGoogleMapsLink($saved)) {
+            return '';
+        }
+
+        if (self::validMapEmbed($saved)) {
+            return $saved;
+        }
+
+        if ($cid = self::mapCid($saved)) {
+            return 'https://maps.google.com/maps?cid=' . $cid . '&z=16&output=embed';
+        }
+
+        $query = self::mapQuery($saved, $address);
+
+        return $query !== '' ? 'https://maps.google.com/maps?q=' . rawurlencode($query) . '&z=16&output=embed' : '';
+    }
+    /** Destination text for Google's directions page: coordinates as they are, a place name together with the address. */
+    private static function directionsTarget(?string $saved, ?string $address): string
+    {
+        $address = trim((string) preg_replace('/\s+/', ' ', (string) $address));
+        $query = self::mapQuery($saved, $address);
+
+        if ($query === '' || $query === $address || preg_match('/^-?\d+\.\d+,-?\d+\.\d+$/', $query)) {
+            return $query !== '' ? $query : $address;
+        }
+
+        return $address !== '' ? $query . ', ' . $address : $query;
+    }
+
+    /** Accepts the full <iframe ...> code Google gives out as well as the bare address inside it. */
+    public static function extractMapSrc(?string $input): string
+    {
+        $input = trim((string) $input);
+
+        if (stripos($input, '<iframe') !== false && preg_match('/src\s*=\s*(["\'])(.*?)\1/i', $input, $match)) {
+            return html_entity_decode(trim($match[2]));
+        }
+
+        return $input;
     }
 
     private function activeCourseCount(): int

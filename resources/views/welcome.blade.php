@@ -11,7 +11,9 @@
 @section('content')
         @include('partials.hero-banners')
 
-        <section class="feature-strip container" data-reveal data-stagger>@foreach ($features as $feature)<article><span class="feature-icon"><i data-lucide="{{ $feature['icon'] }}"></i></span><h3>{{ $feature['title'] }}</h3><p>{{ $feature['text'] }}</p></article>@endforeach</section>
+        @if (! empty($site['features']))
+        <section class="feature-strip container" data-reveal data-stagger style="--cols: {{ count($site['features']) }}" aria-label="How we help you">@foreach ($site['features'] as $feature)<article><span class="feature-icon"><i data-lucide="{{ $feature['icon'] }}"></i></span><h3>{{ $feature['title'] }}</h3>@if ($feature['text'])<p>{{ $feature['text'] }}</p>@endif</article>@endforeach</section>
+        @endif
 
         <section class="news-ticker-bar" aria-label="Latest news">
             <div class="news-ticker-label"><i data-lucide="megaphone"></i><span>LATEST NEWS</span></div>

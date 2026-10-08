@@ -19,14 +19,6 @@ class HomeController extends Controller
 
     public function index(): View
     {
-        $features = [
-            ['icon' => 'book-open', 'title' => 'Practical Training', 'text' => 'Job-ready skills'],
-            ['icon' => 'briefcase-business', 'title' => 'Placement Support', 'text' => 'Job opportunities'],
-            ['icon' => 'monitor-cog', 'title' => 'Modern Labs', 'text' => 'Hands-on learning'],
-            ['icon' => 'badge-check', 'title' => 'Recognized Certification', 'text' => 'Boost your career'],
-            ['icon' => 'users-round', 'title' => 'Expert Instructors', 'text' => 'Industry professionals'],
-        ];
-
         $courses = $this->courses->homeCourses(9);
         $courseTotal = $this->courses->publicCourseCount();
         $banners = Banner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get();
@@ -50,7 +42,7 @@ class HomeController extends Controller
             ->take(20)
             ->get();
 
-        return view('welcome', compact('features', 'courses', 'courseTotal', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));
+        return view('welcome', compact('courses', 'courseTotal', 'banners', 'testimonials', 'newsEvents', 'tickerItems'));
     }
 
     public function courses(Request $request): View|JsonResponse

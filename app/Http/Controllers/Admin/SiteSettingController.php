@@ -16,6 +16,7 @@ class SiteSettingController extends Controller
         'contact' => ['title' => 'Contact & Social Links', 'blurb' => 'Shown on the contact page, top bar and footer.'],
         'stats' => ['title' => 'Statistics', 'blurb' => 'Numbers shown in the animated counters on the homepage.'],
         'about' => ['title' => 'About Us', 'blurb' => 'Content for the About section and About page.'],
+        'features' => ['title' => 'Feature Cards', 'blurb' => 'The five cards shown right under the homepage banner.'],
         'pages' => ['title' => 'Page Heroes', 'blurb' => 'Banner image, title and text at the top of the About, Courses and Contact pages.'],
         'hero' => ['title' => 'Homepage Hero', 'blurb' => 'Headline text shown over the homepage banners.'],
     ];
@@ -38,7 +39,11 @@ class SiteSettingController extends Controller
     {
         abort_unless(isset(self::SECTIONS[$section]), 404);
 
-        $data = $request->validate($this->rules($section));
+        if ($section === 'contact') {
+            $request->merge(['contact_map_url' => SiteSettingsService::extractMapSrc($request->input('contact_map_url'))]);
+        }
+
+        $data = $request->validate($this->rules($section), $this->messages());
 
         foreach (['about_image', 'page_about_image', 'page_courses_image', 'page_contact_image'] as $imageField) {
             unset($data[$imageField]);
@@ -63,7 +68,11 @@ class SiteSettingController extends Controller
                 'contact_phone' => ['required', 'string', 'max:40'],
                 'contact_address' => ['required', 'string', 'max:500'],
                 'contact_hours' => ['nullable', 'string', 'max:255'],
-                'contact_map_url' => $url,
+                'contact_map_url' => ['nullable', 'max:1000', function (string $attribute, mixed $value, \Closure $fail) {
+                    if ($value !== null && $value !== '' && ! SiteSettingsService::isGoogleMapsLink($value)) {
+                        $fail('This is not a Google Maps link. Open your place in Google Maps and copy its address from the browser, or use Share > Embed a map and paste the code. Leave the field empty to show no map.');
+                    }
+                }],
                 'social_whatsapp' => ['nullable', 'string', 'max:500', 'regex:/^(https?:\/\/\S+|[+\d][\d\s\-]{6,19})$/'],
                 'social_facebook' => $url,
                 'social_youtube' => $url,
@@ -87,6 +96,10 @@ class SiteSettingController extends Controller
                 'about_quote' => ['nullable', 'string', 'max:255'],
                 'about_image' => ['nullable', 'image', 'max:4096'],
             ],
+            'features' => collect(range(1, 5))->flatMap(fn ($i) => [
+                'feature_' . $i . '_title' => ['nullable', 'string', 'max:40'],
+                'feature_' . $i . '_text' => ['nullable', 'string', 'max:60'],
+            ])->all(),
             'pages' => collect(['about', 'courses', 'contact'])->flatMap(fn ($page) => [
                 'page_' . $page . '_title' => ['required', 'string', 'max:160'],
                 'page_' . $page . '_text' => ['nullable', 'string', 'max:300'],
@@ -98,6 +111,11 @@ class SiteSettingController extends Controller
                 'hero_text' => ['nullable', 'string', 'max:400'],
             ],
         };
+    }
+
+    private function messages(): array
+    {
+        return [];
     }
 
     private function storeImage(Request $request, string $field): string

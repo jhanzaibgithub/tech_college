@@ -16,7 +16,13 @@
             <div class="admin-full"><label>Address <textarea name="contact_address" rows="3" required>{{ old('contact_address', $values['contact_address']) }}</textarea></label></div>
             <div class="admin-fields">
                 <label>Office hours <input type="text" name="contact_hours" value="{{ old('contact_hours', $values['contact_hours']) }}" placeholder="Mon - Sat, 9:00 AM - 5:00 PM"></label>
-                <label>Google Maps embed URL <input type="url" name="contact_map_url" value="{{ old('contact_map_url', $values['contact_map_url']) }}" placeholder="https://www.google.com/maps/embed?pb=..."></label>
+                <label>Google Maps embed <textarea name="contact_map_url" rows="3" placeholder="Paste your Google Maps link or the embed code. Leave empty for no map.">{{ old('contact_map_url', $values['contact_map_url']) }}</textarea>
+                    @if (filled($values['contact_map_url']) && ! \App\Services\SiteSettingsService::isGoogleMapsLink($values['contact_map_url']))
+                        <small class="field-error" style="display:block">The saved text is not a Google Maps link, so no map is shown on the website. Paste a Google Maps link or embed code, or clear this field.</small>
+                    @else
+                        <small class="field-hint">Optional. Any Google Maps link works (place link, short share link or embed code). If empty, the Contact page shows no map.</small>
+                    @endif
+                </label>
             </div>
             <h3>Social media</h3>
             <p class="field-hint">Only platforms with a link are shown on the website.</p>

@@ -169,3 +169,6 @@
 .ticker-add-note { grid-column: 1 / -1; margin: 0 !important; }
 .ticker-add label small { color: #7a877f; font-weight: 700; text-transform: none; letter-spacing: 0; }
 @media (max-width: 900px) { .maint-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.feature-row-title { display: flex; align-items: center; gap: 10px; }
+.feature-row-title svg { width: 20px; height: 20px; padding: 6px; box-sizing: content-box; border-radius: 10px; background: var(--green); color: #f1cf81; }

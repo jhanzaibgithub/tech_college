@@ -27,7 +27,7 @@
     @include('partials.enroll-modal')
     @include('partials.whatsapp-float')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+    <script src="{{ asset('vendor/lucide.min.js') }}?v={{ filemtime(public_path('vendor/lucide.min.js')) }}"></script>
     @stack('vendor-scripts')
     <script src="{{ asset('js/navigation.js') }}?v={{ filemtime(public_path('js/navigation.js')) }}"></script>
     <script src="{{ asset('js/premium.js') }}?v={{ filemtime(public_path('js/premium.js')) }}"></script>

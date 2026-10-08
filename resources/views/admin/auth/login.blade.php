@@ -36,7 +36,7 @@
             <button type="submit">Login <i data-lucide="arrow-right"></i></button>
         </form>
     </main>
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script><script>
+    <script src="{{ asset('vendor/lucide.min.js') }}?v={{ filemtime(public_path('vendor/lucide.min.js')) }}"></script><script>
         lucide.createIcons();
         document.querySelector('[data-toggle-password]')?.addEventListener('click', (event) => {
             const button = event.currentTarget;
